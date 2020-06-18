@@ -30,13 +30,18 @@ public class PlayerController : MonoBehaviour
             v = joystick.Vertical;
         }
 
-        dir.Set(h, 0, v);
+        //dir.Set(h, 0, v);
         //dir.Normalize();
         //dir = Camera.main.transform.TransformDirection(dir);
         //transform.Translate(dir * speed * Time.deltaTime);
+
+        Vector3 dir = Vector3.forward * v;
+        //중력
         velocityY += gravity * Time.deltaTime;
         dir.y = velocityY;
-        cc.Move(dir * speed * Time.deltaTime);
+
+        transform.Rotate(Vector3.up * h * 90f * Time.deltaTime);
+        cc.Move(transform.TransformDirection(dir) * speed * Time.deltaTime);
 
         if (cc.collisionFlags == CollisionFlags.Below)
         {
