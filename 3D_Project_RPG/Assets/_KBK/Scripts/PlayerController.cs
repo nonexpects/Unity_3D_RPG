@@ -10,13 +10,16 @@ public class PlayerController : MonoBehaviour
     float velocityY;
     float jumpPower = 3f;
     int jumpCount;
+    
     Vector3 dir;
 
     public VariableJoystick joystick;
-
+    Animator anim;
+    
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -29,7 +32,7 @@ public class PlayerController : MonoBehaviour
             h = joystick.Horizontal;
             v = joystick.Vertical;
         }
-
+        
         //dir.Set(h, 0, v);
         //dir.Normalize();
         //dir = Camera.main.transform.TransformDirection(dir);
@@ -43,12 +46,24 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * h * 90f * Time.deltaTime);
         cc.Move(transform.TransformDirection(dir) * speed * Time.deltaTime);
 
+        //애니메이터
+        anim.SetFloat("Run", Mathf.Abs(v));
+
         if (cc.collisionFlags == CollisionFlags.Below)
         {
             velocityY = 0f;
+            anim.ResetTrigger("Jump");
+            anim.SetTrigger("JumpEnd");
             jumpCount = 0;
         }
-
+        else
+        {
+            if(velocityY < 0)
+            {
+                anim.SetTrigger("JumpAir");
+            }
+        }
+        
         if (Input.GetButtonDown("Jump"))
         {
             Jump();
@@ -58,8 +73,10 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         if (jumpCount > 1) return;
-
+        
+        anim.SetTrigger("Jump");
         velocityY = jumpPower;
         jumpCount++;
     }
+
 }
