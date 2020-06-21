@@ -28,25 +28,32 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
 
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            attStack++;
-        }
+        //if(Input.GetKeyDown(KeyCode.V))
+        //{
+        //    attStack++;
+        //    if (attStack > 4) attStack = 0;
+        //}
     }
 
     public void Attack()
     {
-        if(!isAttacking)
+        if (!isAttacking)
         {
+            anim.SetTrigger("Attack");
             StartCoroutine(Attacking());
-            
+        }
+        else
+        {
+            attStack++;
+            if (attStack > 4) attStack = 0;
         }
     }
 
     IEnumerator Attacking()
     {
         isAttacking = true;
-        anim.SetTrigger("Attack");
+        
+        anim.SetInteger("AttackCombo", attStack);
         yield return null;
     }
 }
