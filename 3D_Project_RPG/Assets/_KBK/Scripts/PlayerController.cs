@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,15 +16,32 @@ public class PlayerController : MonoBehaviour
 
     public VariableJoystick joystick;
     Animator anim;
+
+    float currHp;
+    float maxHp = 20;
+    float currExp;
+    float maxExp = 30;
+
+    int currLv = 1;
+
+    public Image hpBar;
+    public Image expBar;
+    public Text lvText;
     
     void Start()
     {
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+
+        currHp = maxHp;
     }
 
     void Update()
     {
+        hpBar.fillAmount = currHp / maxHp;
+        expBar.fillAmount = currExp / maxExp;
+        lvText.text = "LV " + currLv;
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
@@ -79,4 +97,35 @@ public class PlayerController : MonoBehaviour
         jumpCount++;
     }
 
+    public void Damaged(int value)
+    {
+        currHp -= value;
+        if (currHp <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void getExp(int value)
+    {
+        currExp += value;
+        if (currExp >= maxExp)
+        {
+            currExp = 0;
+            currLv++;
+        }
+    }
+
+    private void Die()
+    {
+        cc.enabled = false;
+        StartCoroutine(DieProc());
+        
+        Debug.Log("주거따");
+    }
+
+    IEnumerator DieProc()
+    {
+        yield return null;
+    }
 }

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7914629965847778928}
   - component: {fileID: -4210268123234665942}
   - component: {fileID: 366975125309075731}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b05f30a14a40ae4b96319b3cb10a259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBar: {fileID: 0}
   findRange: 10
   moveRange: 25
   attackRange: 2
@@ -113,4 +114,4 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}

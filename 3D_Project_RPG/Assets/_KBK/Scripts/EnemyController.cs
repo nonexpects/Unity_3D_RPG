@@ -17,12 +17,6 @@ public class EnemyController : MonoBehaviour
 
     EnemyState state; //몬스터 상태변수
 
-    /// <summary>
-    /// 유용한기능 (/// 치면 나옴)
-    /// </summary>
-
-
-
     #region "Idle 상태에 필요한 변수들"
     #endregion
     #region "Move 상태에 필요한 변수들"
@@ -51,7 +45,7 @@ public class EnemyController : MonoBehaviour
     /// 몬스터 일반 변수
     float currHp;
     float maxHp = 10f;
-    float att = 5f;      //공격력
+    int att = 5;      //공격력
     float speed = 5f;   //스피드
 
     //공격 딜레이
@@ -67,7 +61,7 @@ public class EnemyController : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Transform>();
 
         cc = GetComponent<CharacterController>();
-
+        
         currHp = maxHp;
     }
 
@@ -91,10 +85,12 @@ public class EnemyController : MonoBehaviour
             case EnemyState.Damaged:
                 Damaged();
                 break;
-            case EnemyState.Die:
-                Die();
-                break;
+            //case EnemyState.Die:
+            //    Die();
+            //    break;
         }//end of void Update()
+
+        
     }
 
     private void Idle()
@@ -143,13 +139,13 @@ public class EnemyController : MonoBehaviour
         Vector3 dir = (player.transform.position - transform.position).normalized;
         transform.forward = dir;
         // - 공격 범위 1미터
-        if (Vector3.Distance(transform.position, player.transform.position) < attackRange)
+        if (Vector3.Distance(transform.position, player.transform.position) < attackRange )
         {
             //일정 시간마다 플레이어를 공격하기
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                print("공격");
+                player.GetComponent<PlayerController>().Damaged(att);
                 //타이머 초기화
                 timer = 0f;
             }
@@ -167,7 +163,7 @@ public class EnemyController : MonoBehaviour
     //복귀 상태
     private void Return()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) > 0.1f)
+        if (Vector3.Distance(transform.position, spawnPos) > 0.1f)
         {
             //1. 몬스터가 플레이어를 추격하더라도 처음 위치에서 일정 범위 벗어나면 다시 돌아옴
             Vector3 dir = (spawnPos - transform.position).normalized;
@@ -222,7 +218,7 @@ public class EnemyController : MonoBehaviour
     {
         //혹시 진행중인 모든 코루틴을 정지한다
         StopAllCoroutines();
-
+        player.GetComponent<PlayerController>().getExp(10);
         StartCoroutine(DieProc());
 
     }
@@ -241,10 +237,11 @@ public class EnemyController : MonoBehaviour
     {
         //굳이 안해줘도 되지만 오브젝트 날리기 전에 비활성화 해주는게 좋다.
         cc.enabled = false;
-
+        
         //2초 후에 자기자신 제거
         yield return new WaitForSeconds(2f);
         print("죽음");
+        
         Destroy(gameObject);
     }
 

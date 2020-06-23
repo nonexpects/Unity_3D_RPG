@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public enum EventType
+    {
+        Die
+    }
+
+    public static GameManager instance;
+    public delegate void PlayerEventHandler();
+    public static event PlayerEventHandler OnPlayerEvent;
+
+    private void Awake() => instance = this;
+    
+    public static Dictionary<EventType, PlayerEventHandler> _delegateDic;
+
     void Start()
     {
         
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         
+    }
+
+    public void AddListner(EventType eventType, PlayerEventHandler delegateFunc)
+    {
+        if(_delegateDic.ContainsKey(eventType) == false)
+        {
+            _delegateDic.Add(eventType, delegateFunc);
+        }
+
+        _delegateDic[eventType] += delegateFunc;
     }
 }

@@ -13,7 +13,7 @@ public class PlayerAttack : MonoBehaviour
     Animator anim;
 
     int attStack;
-    bool isAttacking;
+    public bool isAttacking;
 
     void Start()
     {
@@ -72,7 +72,5 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
         
-
-
     }
 }
