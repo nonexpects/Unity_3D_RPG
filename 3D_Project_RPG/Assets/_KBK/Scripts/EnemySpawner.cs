@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             spawnPoint[i] = (Random.insideUnitSphere * spawnRadius) + transform.position;
-            spawnPoint[i].y = 0;
+            spawnPoint[i].y = 1;
         }
         //spawnPosition =  spawnPoint;
         //spawnPosition.y = 1;
