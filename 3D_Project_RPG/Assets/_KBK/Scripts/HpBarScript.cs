@@ -32,8 +32,8 @@ public class HpBarScript : MonoBehaviour
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
+            if (enemyList[i] == null) continue;
             hpBarList[i].transform.position = mainCam.WorldToScreenPoint(enemyList[i].position + new Vector3(0, 1.15f, 0));
-            
         }
 
     }
