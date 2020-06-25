@@ -17,7 +17,7 @@ public class Weapon : MonoBehaviour
         if (player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("ENEMY"))
         {
             Debug.Log("hit " + other.name);
-            EnemyController enemy = other.gameObject.GetComponent<EnemyController>();
+            EnemyFSM enemy = other.gameObject.GetComponent<EnemyFSM>();
             enemy.hitDamage(WeaponDamage);
         }
     }

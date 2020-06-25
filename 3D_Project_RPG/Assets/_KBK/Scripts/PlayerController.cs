@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         dir.y = velocityY;
 
         transform.Rotate(Vector3.up * h * 90f * Time.deltaTime);
-        cc.Move(transform.TransformDirection(dir) * speed * Time.deltaTime);
+        if(cc.enabled) cc.Move(transform.TransformDirection(dir) * speed * Time.deltaTime);
 
         //애니메이터
         anim.SetFloat("Run", Mathf.Abs(v));

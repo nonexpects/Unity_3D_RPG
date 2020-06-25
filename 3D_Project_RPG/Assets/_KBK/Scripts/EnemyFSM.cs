@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyFSM : MonoBehaviour
 {
     // 몬스터 상태 enum문
-    enum EnemyState
+    protected enum EnemyState
     {
         Idle,
         Move,
@@ -15,44 +15,31 @@ public class EnemyController : MonoBehaviour
         Die
     }
 
-    EnemyState state; //몬스터 상태변수
-
-    #region "Idle 상태에 필요한 변수들"
-    #endregion
-    #region "Move 상태에 필요한 변수들"
-    #endregion
-    #region "Attack 상태에 필요한 변수들"
-    #endregion
-    #region "Return 상태에 필요한 변수들"
-    #endregion
-    #region "Damaged 상태에 필요한 변수들"
-    #endregion
-    #region "Die 상태에 필요한 변수들"
-    #endregion
-
+    protected EnemyState state; //몬스터 상태변수
+    
     /// 필요한 변수들
-    /// 
     public float findRange = 10f;  //플레이어 찾는 범위
     public float moveRange = 25f;   //시작 지접에서 최대 이용가능한 범위
     public float attackRange = 2f; //공격 가능 범위
-    Vector3 spawnPos;  //시작지점
-    Transform player;           //플레이어 찾기 위해서
-    //GameObject player;
-    CharacterController cc;     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
-    Animator anim;
-    float moveSpeed = 5f;
+    protected Vector3 spawnPos;  //시작지점
+    protected Transform player;           //플레이어 찾기 위해서
+    protected CharacterController cc;     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
+    protected Animator anim;
+    protected float moveSpeed = 5f;
 
     /// 몬스터 일반 변수
-    float currHp;
-    float maxHp = 10f;
-    int att = 5;      //공격력
-    float speed = 5f;   //스피드
+    protected float currHp;
+    protected float maxHp;
+    protected int att;      //공격력
+    //float speed = 5f;   //스피드
 
     //공격 딜레이
-    float attTime = 2f; //2초에 한 번 공격
-    float timer = 0;    //타이머
+    protected float attTime; //2초에 한 번 공격
+    protected float timer;    //타이머
 
-    void Start()
+    Quaternion rot = Quaternion.Euler(new Vector3(0, 1, 0));
+    
+    protected virtual void Start()
     {
         //몬스터 상태 초기화
         state = EnemyState.Idle;
@@ -61,7 +48,9 @@ public class EnemyController : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Transform>();
 
         cc = GetComponent<CharacterController>();
-        
+
+        anim = GetComponentInChildren<Animator>();
+
         currHp = maxHp;
     }
 
@@ -85,9 +74,9 @@ public class EnemyController : MonoBehaviour
             case EnemyState.Damaged:
                 Damaged();
                 break;
-            //case EnemyState.Die:
-            //    Die();
-            //    break;
+            case EnemyState.Die:
+                Die();
+                break;
         }//end of void Update()
 
         
@@ -101,10 +90,12 @@ public class EnemyController : MonoBehaviour
             state = EnemyState.Move;
             // - 상태 전환 출력
             print("Change State Idle to Move State");
+
+            anim.SetTrigger("Move");
         }
     }
 
-    private void Move()
+    protected virtual void Move()
     {
         // - 공격 범위 2미터
         if (Vector3.Distance(spawnPos, transform.position) > moveRange)
@@ -120,8 +111,7 @@ public class EnemyController : MonoBehaviour
             //플레이어 추격
             //이동방법 (벡터의 뺄셈)
             Vector3 dir = (player.transform.position - transform.position).normalized;
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir) * rot, 10 * Time.deltaTime);
             
             cc.SimpleMove(dir * moveSpeed);
         }
@@ -134,49 +124,30 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Attack()
-    {
-        Vector3 dir = (player.transform.position - transform.position).normalized;
-        transform.forward = dir;
-        // - 공격 범위 1미터
-        if (Vector3.Distance(transform.position, player.transform.position) < attackRange )
-        {
-            //일정 시간마다 플레이어를 공격하기
-            timer += Time.deltaTime;
-            if (timer > attTime)
-            {
-                player.GetComponent<PlayerController>().Damaged(att);
-                //타이머 초기화
-                timer = 0f;
-            }
-        }
-        else //현재 상태를 Move로 변경(재추격)
-        {
-            // - 상태 변경
-            state = EnemyState.Move;
-            // - 상태 전환 출력
-            print("Change State Attack to Move State");
-            timer = 0f;
-        }
-    }
+    protected virtual void Attack() {}
 
     //복귀 상태
-    private void Return()
+    protected virtual void Return()
     {
         if (Vector3.Distance(transform.position, spawnPos) > 0.1f)
         {
             //1. 몬스터가 플레이어를 추격하더라도 처음 위치에서 일정 범위 벗어나면 다시 돌아옴
             Vector3 dir = (spawnPos - transform.position).normalized;
+             
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir) * rot, 10 * Time.deltaTime);
             cc.SimpleMove(dir * moveSpeed);
         }
         else
         {
             //위치값을 초기값으로
             transform.position = spawnPos;
+            transform.rotation = Quaternion.identity;
             // - 상태 변경
             state = EnemyState.Idle;
             // - 상태 전환 출력
             print("Change State Return to Idle State");
+
+            anim.SetTrigger("Idle");
         }
 
     }

@@ -10,13 +10,24 @@ public class GameManager : MonoBehaviour
     }
 
     public static GameManager instance;
-    public delegate void PlayerEventHandler();
-    public static event PlayerEventHandler OnPlayerEvent;
+    [HideInInspector]
+    public GameObject enemyList;
 
-    private void Awake() => instance = this;
+    private void Awake() // => instance = this;
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+        }
+
+        enemyList = new GameObject("EnemyList");
+    }
     
-    public static Dictionary<EventType, PlayerEventHandler> _delegateDic;
-
     void Start()
     {
         
@@ -27,13 +38,13 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void AddListner(EventType eventType, PlayerEventHandler delegateFunc)
-    {
-        if(_delegateDic.ContainsKey(eventType) == false)
-        {
-            _delegateDic.Add(eventType, delegateFunc);
-        }
-
-        _delegateDic[eventType] += delegateFunc;
-    }
+    //public void AddListner(EventType eventType, PlayerEventHandler delegateFunc)
+    //{
+    //    if(_delegateDic.ContainsKey(eventType) == false)
+    //    {
+    //        _delegateDic.Add(eventType, delegateFunc);
+    //    }
+    //
+    //    _delegateDic[eventType] += delegateFunc;
+    //}
 }
