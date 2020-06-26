@@ -7,6 +7,7 @@ public class EnemySpawner : MonoBehaviour
     public int spawnRadius = 5;
     public GameObject archer;
     public GameObject warrior;
+    public GameObject mage;
 
     BoxCollider bc;
 
@@ -22,31 +23,26 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            //Vector3 spawnPoint = (Random.insideUnitSphere * spawnRadius) + transform.position;
-            //spawnPoint.y = 1;
-            if(i < 2)
+            if(i == 0)
             {
-                GameObject enemy = Instantiate(archer, spawnPoint[i+1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
+                GameObject enemy = Instantiate(mage, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
+                enemy.SetActive(false);
+                enemyList.Add(enemy);
+            }
+            else if(i > 0 && i < 3)
+            {
+                GameObject enemy = Instantiate(archer, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
                 enemy.SetActive(false);
                 enemyList.Add(enemy);
             }
             else
             {
-                GameObject enemy = Instantiate(warrior, spawnPoint[i+1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
+                GameObject enemy = Instantiate(warrior, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
                 enemy.SetActive(false);
                 enemyList.Add(enemy);
             }
-        }
-        //spawnPosition =  spawnPoint;
-        //spawnPosition.y = 1;
-        
-        //GameObject.Find("EnemySpawn").GetComponentsInChildren<Transform>(enemySpawnPoint);
-        
-    }
 
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawSphere(spawnPoint, spawnRadius);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

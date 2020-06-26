@@ -24,8 +24,8 @@ public class MeleeController : EnemyFSM
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                player.GetComponent<PlayerController>().Damaged(att);
-                Debug.Log("어택!");
+                //player.GetComponent<PlayerController>().Damaged(att);
+                Debug.Log("밀리어택!");
                 //타이머 초기화
                 timer = 0f;
             }

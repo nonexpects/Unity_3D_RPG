@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public enum EventType
-    {
-        Die
-    }
-
     public static GameManager instance;
     [HideInInspector]
     public GameObject enemyList;
+    
+    public bool playerDead;
 
     private void Awake() // => instance = this;
     {
@@ -38,13 +35,5 @@ public class GameManager : MonoBehaviour
         
     }
 
-    //public void AddListner(EventType eventType, PlayerEventHandler delegateFunc)
-    //{
-    //    if(_delegateDic.ContainsKey(eventType) == false)
-    //    {
-    //        _delegateDic.Add(eventType, delegateFunc);
-    //    }
-    //
-    //    _delegateDic[eventType] += delegateFunc;
-    //}
+    
 }

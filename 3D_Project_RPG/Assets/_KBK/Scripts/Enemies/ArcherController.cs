@@ -1,16 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy_Status;
 
-public class ArcherController : EnemyFSM
+public class ArcherController : MonoBehaviour
 {
+    EnemyState state; //몬스터 상태변수
+
+    public GameObject quiver;
+    public GameObject arrowPrefab;
+    int maxArrow = 30;
+    List<GameObject> arrows;
+
     protected override void Start()
     {
         maxHp = 10f;
-        att = 5;
-        attTime = 2f;
+        att = 2;
+        attTime = 3f;
 
+        attackRange = 8f;
+        
         base.Start();
+        
+        for (int i = 0; i < maxArrow; i++)
+        {
+            GameObject ar = Instantiate(arrowPrefab, quiver.transform);
+            
+            arrows.Add(ar);
+        }
     }
 
     protected override void Move()
@@ -55,7 +72,18 @@ public class ArcherController : EnemyFSM
             if (timer > attTime)
             {
                 player.GetComponent<PlayerController>().Damaged(att);
-                Debug.Log("어택!");
+                Debug.Log("화살어택!");
+                for (int i = 0; i < arrows.Count; i++)
+                {
+                    if (!arrows[i].activeSelf)
+                    {
+                        arrows[i].transform.position = transform.position;
+                        arrows[i].transform.rotation = transform.rotation;
+                        arrows[i].SetActive(true);
+                        break;
+                    }
+                }
+
                 //타이머 초기화
                 timer = 0f;
             }

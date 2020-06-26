@@ -5,11 +5,11 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public int WeaponDamage = 2;
-    PlayerAttack player;
+    PlayerController player;
 
     private void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerAttack>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     private void OnTriggerEnter(Collider other)

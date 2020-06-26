@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy_Status;
 
-public class EnemyFSM : MonoBehaviour
+namespace Enemy_Status
 {
     // 몬스터 상태 enum문
-    protected enum EnemyState
+    public enum EnemyState
     {
         Idle,
         Move,
@@ -15,27 +16,37 @@ public class EnemyFSM : MonoBehaviour
         Die
     }
 
-    protected EnemyState state; //몬스터 상태변수
-    
-    /// 필요한 변수들
-    public float findRange = 10f;  //플레이어 찾는 범위
-    public float moveRange = 25f;   //시작 지접에서 최대 이용가능한 범위
-    public float attackRange = 2f; //공격 가능 범위
-    protected Vector3 spawnPos;  //시작지점
-    protected Transform player;           //플레이어 찾기 위해서
-    protected CharacterController cc;     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
-    protected Animator anim;
-    protected float moveSpeed = 5f;
+    interface Enemy
+    {
+        /// 필요한 변수들
+        float findRange { get; set; }     //플레이어 찾는 범위
+        float moveRange { get; set; }     //시작 지접에서 최대 이용가능한 범위
+        float attackRange { get; set; }   //공격 가능 범위
+        Vector3 spawnPos { get; set; }           //시작지점
+        Transform player { get; set; }           //플레이어 찾기 위해서
+        CharacterController cc { get; set; }     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
+        Animator anim { get; set; }
+        float moveSpeed { get; set; }
+        float returnSpeed { get; set; }
+    }
 
+
+}
+
+public class EnemyFSM : MonoBehaviour
+{
+    EnemyState state; //몬스터 상태변수
+    
+    
     /// 몬스터 일반 변수
-    protected float currHp;
-    protected float maxHp;
-    protected int att;      //공격력
+    float currHp;
+    float maxHp;
+    int att;      //공격력
     //float speed = 5f;   //스피드
 
     //공격 딜레이
-    protected float attTime; //2초에 한 번 공격
-    protected float timer;    //타이머
+    float attTime; //2초에 한 번 공격
+    float timer;    //타이머
 
     Quaternion rot = Quaternion.Euler(new Vector3(0, 1, 0));
     
@@ -56,30 +67,33 @@ public class EnemyFSM : MonoBehaviour
 
     void Update()
     {
-        //상태에 따른 행동처리
-        switch (state)
+        if(gameObject.activeSelf)
         {
-            case EnemyState.Idle:
-                Idle();
-                break;
-            case EnemyState.Move:
-                Move();
-                break;
-            case EnemyState.Attack:
-                Attack();
-                break;
-            case EnemyState.Return:
-                Return();
-                break;
-            case EnemyState.Damaged:
-                Damaged();
-                break;
-            case EnemyState.Die:
-                Die();
-                break;
-        }//end of void Update()
-
-        
+            //상태에 따른 행동처리
+            switch (state)
+            {
+                case EnemyState.Idle:
+                    Idle();
+                    break;
+                case EnemyState.Move:
+                    Move();
+                    break;
+                case EnemyState.Attack:
+                    if(GameManager.instance.playerDead)
+                    {
+                        state = EnemyState.Return;
+                        anim.SetTrigger("Move");
+                    }
+                    Attack();
+                    break;
+                case EnemyState.Return:
+                    Return();
+                    break;
+                case EnemyState.Damaged:
+                    Damaged();
+                    break;
+            }//end of void Update()
+        }
     }
 
     private void Idle()
@@ -98,12 +112,13 @@ public class EnemyFSM : MonoBehaviour
     protected virtual void Move()
     {
         // - 공격 범위 2미터
-        if (Vector3.Distance(spawnPos, transform.position) > moveRange)
+        if (Vector3.Distance(spawnPos, transform.position) > moveRange && GameManager.instance.playerDead)
         {
             // - 상태 변경
             state = EnemyState.Return;
             // - 상태 전환 출력
             print("Change State Move to Return State");
+            anim.SetTrigger("Move");
         }
         //moveRange를 벗어나지 않고 공격범위에 있지도 않음
         else if (Vector3.Distance(transform.position, player.transform.position) > attackRange)
@@ -135,7 +150,7 @@ public class EnemyFSM : MonoBehaviour
             Vector3 dir = (spawnPos - transform.position).normalized;
              
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir) * rot, 10 * Time.deltaTime);
-            cc.SimpleMove(dir * moveSpeed);
+            cc.SimpleMove(dir * returnSpeed);
         }
         else
         {
