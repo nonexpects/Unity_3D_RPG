@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Enemy_Status;
 
-public class ArcherController : MonoBehaviour
+public class ArcherController : EnemyFSM
 {
-    EnemyState state; //몬스터 상태변수
-
-    public GameObject quiver;
+    //public GameObject quiver;
     public GameObject arrowPrefab;
-    int maxArrow = 30;
+    int maxArrow = 5;
     List<GameObject> arrows;
 
     protected override void Start()
@@ -18,14 +15,15 @@ public class ArcherController : MonoBehaviour
         att = 2;
         attTime = 3f;
 
-        attackRange = 8f;
-        
+        attackRange = 4f;
+
+        arrows = new List<GameObject>();
+
         base.Start();
         
         for (int i = 0; i < maxArrow; i++)
         {
-            GameObject ar = Instantiate(arrowPrefab, quiver.transform);
-            
+            GameObject ar = Instantiate(arrowPrefab);
             arrows.Add(ar);
         }
     }
@@ -71,14 +69,15 @@ public class ArcherController : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                player.GetComponent<PlayerController>().Damaged(att);
                 Debug.Log("화살어택!");
                 for (int i = 0; i < arrows.Count; i++)
                 {
                     if (!arrows[i].activeSelf)
                     {
-                        arrows[i].transform.position = transform.position;
-                        arrows[i].transform.rotation = transform.rotation;
+                        arrows[i].transform.position = transform.position + new Vector3(0, 1, 0);
+                        //arrows[i].transform.LookAt(player.transform.position);
+                        arrows[i].GetComponent<Rigidbody>().AddForce(arrows[i].transform.up * 10f);
+                        //arrows[i].transform.rotation = Quaternion.EulerAngles(Vector3.forward + Vector3.up);
                         arrows[i].SetActive(true);
                         break;
                     }

@@ -37,9 +37,9 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                GameObject enemy = Instantiate(warrior, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
-                enemy.SetActive(false);
-                enemyList.Add(enemy);
+                //GameObject enemy = Instantiate(warrior, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
+                //enemy.SetActive(false);
+                //enemyList.Add(enemy);
             }
 
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageController : MonoBehaviour
+public class MageController : EnemyFSM
 {
     public GameObject quiver;
     public GameObject arrow;
@@ -15,19 +15,10 @@ public class MageController : MonoBehaviour
         att = 5;
         attTime = 2f;
 
-        base.Start();
+        attackRange = 5f;
 
-        //for (int i = 0; i < maxArrow; i++)
-        //{
-        //    GameObject ar = Instantiate(arrow, transform.position, Quaternion.identity, quiver.transform);
-        //
-        //    if (i != 0)
-        //    {
-        //        ar.SetActive(false);
-        //    }
-        //
-        //    arrows.Add(ar);
-        //}
+        base.Start();
+        
 
     }
 

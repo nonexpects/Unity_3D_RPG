@@ -1,57 +1,72 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Enemy_Status;
 
-namespace Enemy_Status
+//namespace Enemy_Status
+//{
+//    interface IEnemyFSM
+//    {
+//        /// 필요한 변수들
+//        float findRange { get; set; }     //플레이어 찾는 범위
+//        float moveRange { get; set; }     //시작 지접에서 최대 이용가능한 범위
+//        float attackRange { get; set; }   //공격 가능 범위
+//        Vector3 spawnPos { get; set; }           //시작지점
+//        Transform player { get; set; }           //플레이어 찾기 위해서
+//        CharacterController cc { get; set; }     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
+//        Animator anim { get; set; }
+//        float moveSpeed { get; set; }
+//        float returnSpeed { get; set; }
+
+//        void Idle();
+//        void Move();
+//        void Attack();
+//        void Return();
+//        void Damaged();
+//        void Die();
+//    }
+//}
+
+public class EnemyFSM : MonoBehaviour
 {
     // 몬스터 상태 enum문
     public enum EnemyState
     {
         Idle,
         Move,
-        Attack,
-        Return,
+        Attack,  
         Damaged,
+        Return,
         Die
     }
 
-    interface Enemy
-    {
-        /// 필요한 변수들
-        float findRange { get; set; }     //플레이어 찾는 범위
-        float moveRange { get; set; }     //시작 지접에서 최대 이용가능한 범위
-        float attackRange { get; set; }   //공격 가능 범위
-        Vector3 spawnPos { get; set; }           //시작지점
-        Transform player { get; set; }           //플레이어 찾기 위해서
-        CharacterController cc { get; set; }     //캐릭터 이동 위해 캐릭터 컨트롤러 필요
-        Animator anim { get; set; }
-        float moveSpeed { get; set; }
-        float returnSpeed { get; set; }
-    }
+    public EnemyState state; //몬스터 상태변수
 
-
-}
-
-public class EnemyFSM : MonoBehaviour
-{
-    EnemyState state; //몬스터 상태변수
+    protected Vector3 spawnPos;
+    public float findRange = 15;
+    public float moveRange = 8;
+    public float attackRange = 4;
     
-    
+    protected Transform player;
+    protected CharacterController cc;
+    protected Animator anim;
+    protected float moveSpeed;
+    protected float returnSpeed;
+
+                    
     /// 몬스터 일반 변수
-    float currHp;
-    float maxHp;
-    int att;      //공격력
+    protected float currHp;
+    protected float maxHp;
+    protected int att;      //공격력
     //float speed = 5f;   //스피드
 
     //공격 딜레이
-    float attTime; //2초에 한 번 공격
-    float timer;    //타이머
+    protected float attTime; //2초에 한 번 공격
+    protected float timer;    //타이머
 
     Quaternion rot = Quaternion.Euler(new Vector3(0, 1, 0));
     
     protected virtual void Start()
-    {
+    { 
         //몬스터 상태 초기화
         state = EnemyState.Idle;
         spawnPos = transform.position;
@@ -67,7 +82,13 @@ public class EnemyFSM : MonoBehaviour
 
     void Update()
     {
-        if(gameObject.activeSelf)
+        if (GameManager.instance.playerDead)
+        {
+            state = EnemyState.Idle;
+            anim.SetTrigger("Idle");
+        }
+
+        if (gameObject.activeSelf)
         {
             //상태에 따른 행동처리
             switch (state)
@@ -79,11 +100,6 @@ public class EnemyFSM : MonoBehaviour
                     Move();
                     break;
                 case EnemyState.Attack:
-                    if(GameManager.instance.playerDead)
-                    {
-                        state = EnemyState.Return;
-                        anim.SetTrigger("Move");
-                    }
                     Attack();
                     break;
                 case EnemyState.Return:

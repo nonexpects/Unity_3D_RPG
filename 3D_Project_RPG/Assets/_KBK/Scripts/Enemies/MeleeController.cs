@@ -9,6 +9,9 @@ public class MeleeController : EnemyFSM
         maxHp = 10f;
         att = 5;
         attTime = 2f;
+        moveSpeed = 3f;
+
+        attackRange = 0.5f;
 
         base.Start();
     }
