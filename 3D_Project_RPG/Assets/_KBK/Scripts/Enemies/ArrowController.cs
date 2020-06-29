@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArrowController : MonoBehaviour
 {
-    float speed = 3f;
+    float speed = 15f;
     int att = 1;
 
     Rigidbody rg;
@@ -17,8 +17,8 @@ public class ArrowController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(transform.right * speed * Time.deltaTime);
-        transform.right = rg.velocity;
+        transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
+        transform.right += rg.velocity * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,7 +30,7 @@ public class ArrowController : MonoBehaviour
         }
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
+        rg.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
-        
     }
 }

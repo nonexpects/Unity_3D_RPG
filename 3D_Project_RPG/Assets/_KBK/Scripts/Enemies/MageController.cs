@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class MageController : EnemyFSM
 {
-    public GameObject quiver;
-    public GameObject arrow;
-    int maxArrow = 30;
-    List<GameObject> arrows;
+    //public GameObject quiver;
+    public GameObject magicBallPrefab;
+    int maxArrow = 8;
+    List<GameObject> magicBall;
 
     protected override void Start()
     {
         maxHp = 10f;
-        att = 5;
-        attTime = 2f;
+         
+        attTime = 3f;
 
-        attackRange = 5f;
+        attackRange = 8f;
+
+        magicBall = new List<GameObject>();
 
         base.Start();
-        
 
+        for (int i = 0; i < maxArrow; i++)
+        {
+            GameObject ar = Instantiate(magicBallPrefab);
+            ar.SetActive(false);
+            magicBall.Add(ar);
+        }
     }
 
     protected override void Move()
@@ -55,6 +62,7 @@ public class MageController : EnemyFSM
     protected override void Attack()
     {
         Vector3 dir = (player.transform.position - transform.position).normalized;
+        dir.y = 0;
         transform.forward = dir;
         // - 공격 범위 1미터
         if (Vector3.Distance(transform.position, player.transform.position) < attackRange)
@@ -63,8 +71,10 @@ public class MageController : EnemyFSM
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                player.GetComponent<PlayerController>().Damaged(att);
-                Debug.Log("어택!");
+                Debug.Log("매직캐스트!");
+                anim.SetTrigger("Attack");
+                Invoke("MagicCast", 0.9f);
+
                 //타이머 초기화
                 timer = 0f;
             }
@@ -79,4 +89,18 @@ public class MageController : EnemyFSM
         }
     }
 
+    void MagicCast()
+    {
+        for (int i = 0; i < magicBall.Count; i++)
+        {
+            if (!magicBall[i].activeSelf)
+            {
+                magicBall[i].transform.position = transform.position + (transform.forward + transform.up);
+                magicBall[i].transform.rotation = transform.rotation;
+                magicBall[i].GetComponent<Rigidbody>().AddForce(transform.up * 1000f);
+                magicBall[i].SetActive(true);
+                break;
+            }
+        }
+    }
 }

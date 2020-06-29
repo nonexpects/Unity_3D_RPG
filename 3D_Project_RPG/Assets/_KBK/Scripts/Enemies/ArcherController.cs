@@ -13,9 +13,9 @@ public class ArcherController : EnemyFSM
     {
         maxHp = 10f;
         att = 2;
-        attTime = 3f;
+        attTime = 1.5f;
 
-        attackRange = 4f;
+        attackRange = 8f;
 
         arrows = new List<GameObject>();
 
@@ -61,6 +61,7 @@ public class ArcherController : EnemyFSM
     protected override void Attack()
     {
         Vector3 dir = (player.transform.position - transform.position).normalized;
+        dir.y = 0;
         transform.forward = dir;
         // - 공격 범위 1미터
         if (Vector3.Distance(transform.position, player.transform.position) < attackRange)
@@ -70,18 +71,8 @@ public class ArcherController : EnemyFSM
             if (timer > attTime)
             {
                 Debug.Log("화살어택!");
-                for (int i = 0; i < arrows.Count; i++)
-                {
-                    if (!arrows[i].activeSelf)
-                    {
-                        arrows[i].transform.position = transform.position + new Vector3(0, 1, 0);
-                        //arrows[i].transform.LookAt(player.transform.position);
-                        arrows[i].GetComponent<Rigidbody>().AddForce(arrows[i].transform.up * 10f);
-                        //arrows[i].transform.rotation = Quaternion.EulerAngles(Vector3.forward + Vector3.up);
-                        arrows[i].SetActive(true);
-                        break;
-                    }
-                }
+                anim.SetTrigger("Attack");
+                Invoke("ShootArrow", 0.3f);
 
                 //타이머 초기화
                 timer = 0f;
@@ -96,4 +87,21 @@ public class ArcherController : EnemyFSM
             timer = 0f;
         }
     }
+
+    void ShootArrow()
+    {
+        for (int i = 0; i < arrows.Count; i++)
+        {
+            if (!arrows[i].activeSelf)
+            {
+                arrows[i].transform.position = transform.position + (transform.forward + transform.up).normalized;
+                arrows[i].transform.right = transform.forward;
+                arrows[i].GetComponent<Rigidbody>().AddForce((transform.up + transform.right).normalized * 1000f);
+                arrows[i].SetActive(true);
+                break;
+            }
+        }
+    }
 }
+
+

@@ -182,6 +182,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void getHp(int value)
+    {
+        currHp += value;
+        if (currHp >= maxHp)
+        {
+            currHp = maxHp;
+        }
+    }
+
     private void Die()
     {
         cc.enabled = false;

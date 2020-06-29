@@ -9,6 +9,8 @@ public class EnemySpawner : MonoBehaviour
     public GameObject warrior;
     public GameObject mage;
 
+    public GameObject boxPrefab;
+
     BoxCollider bc;
 
     //List<Transform> enemySpawnPoint;
@@ -37,11 +39,20 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                //GameObject enemy = Instantiate(warrior, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
-                //enemy.SetActive(false);
-                //enemyList.Add(enemy);
+                GameObject enemy = Instantiate(warrior, spawnPoint[i + 1].position, Quaternion.identity, GameManager.instance.enemyList.transform);
+                enemy.SetActive(false);
+                enemyList.Add(enemy);
             }
 
+        }
+    }
+
+    private void Update()
+    {
+        if(enemyList.Count == 0)
+        {
+            Instantiate(boxPrefab);
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -57,4 +68,5 @@ public class EnemySpawner : MonoBehaviour
         }
         
     }
+    
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7914629965847778942}
   - component: {fileID: 366975125309075731}
-  - component: {fileID: 7893699956656819091}
+  - component: {fileID: 6725931184383548079}
   m_Layer: 9
   m_Name: Mage
   m_TagString: Enemy
@@ -51,7 +51,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.48, z: 0}
---- !u!114 &7893699956656819091
+--- !u!114 &6725931184383548079
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,14 +60,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7914629965847778930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fedde1f8fc7db6348a4125dc39d06818, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a1e4022fe53d73459bef11a0b7d7359, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findRange: 10
-  moveRange: 15
-  attackRange: 2
+  state: 0
+  findRange: 15
+  moveRange: 8
+  attackRange: 4
   quiver: {fileID: 0}
-  arrow: {fileID: 0}
+  magicBallPrefab: {fileID: 4942372779250065116, guid: 6d5e0d69bb05ca549a5f4650bf099db0,
+    type: 3}
 --- !u!1001 &8663850312254465133
 PrefabInstance:
   m_ObjectHideFlags: 0
