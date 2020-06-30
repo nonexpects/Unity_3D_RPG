@@ -230,7 +230,7 @@ public class EnemyFSM : MonoBehaviour
         GameObject fx = Instantiate(deathFx);
         fx.transform.position = transform.position;
         Destroy(fx, 1f);
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
     //시각적으로 범위 표시

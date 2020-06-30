@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     // 공격
     Text attText;
-    int attStack;
+    public int attStack;
     public bool isAttacking;
     float currAttTime;
     float maxAttTime = 1.5f;
@@ -224,11 +224,11 @@ public class PlayerController : MonoBehaviour
 
             if (attStack > 4)
             {
-                isAttacking = false;
+                attStack = 4;
             }
         }
 
-        Debug.Log("Attack Stack : " + attStack);
+        //Debug.Log("Attack Stack : " + attStack);
     }
 
     IEnumerator Attacking()
@@ -240,6 +240,7 @@ public class PlayerController : MonoBehaviour
             if (currAttTime > maxAttTime)
             {
                 isAttacking = false;
+                attStack = 0;
             }
             yield return null;
         }

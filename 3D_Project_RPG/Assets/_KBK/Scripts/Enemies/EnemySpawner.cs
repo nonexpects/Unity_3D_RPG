@@ -9,9 +9,11 @@ public class EnemySpawner : MonoBehaviour
     public GameObject warrior;
     public GameObject mage;
 
-    public GameObject boxPrefab;
+    GameObject boxPrefab;
 
     BoxCollider bc;
+
+    bool isEnemyAlive = true;
 
     //List<Transform> enemySpawnPoint;
 
@@ -45,13 +47,20 @@ public class EnemySpawner : MonoBehaviour
             }
 
         }
+
+        boxPrefab = Resources.Load("Model/Chest") as GameObject;
     }
 
     private void Update()
     {
-        if(enemyList.Count == 0)
+        isEnemyAlive = EnemyCheck();
+
+        if(!isEnemyAlive)
         {
-            Instantiate(boxPrefab);
+            Debug.Log("다사라졌다");
+            Instantiate(boxPrefab, transform.position, Quaternion.identity);
+
+            GameManager.instance.appearCheck++;
             this.gameObject.SetActive(false);
         }
     }
@@ -67,6 +76,18 @@ public class EnemySpawner : MonoBehaviour
             bc.enabled = false;
         }
         
+    }
+
+    public bool EnemyCheck()
+    {
+        int c = 0;
+
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            c += (enemyList[i] == null) ? 0 : 1;
+        }
+
+        return c > 0 ? true : false;
     }
     
 }

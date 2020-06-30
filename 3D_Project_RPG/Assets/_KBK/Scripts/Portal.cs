@@ -11,7 +11,7 @@ public class Portal : MonoBehaviour
     public GameObject portalOffFx;
     public GameObject portalOffFx2;
 
-    float speed = 10f;
+    float speed = 12f;
 
     bool portalClosed;
     
@@ -19,8 +19,6 @@ public class Portal : MonoBehaviour
     {
         portal = Instantiate(portalFx, transform.position, Quaternion.identity, transform); ;
         portal.transform.localScale = Vector3.zero;
-
-
         StartCoroutine(OpenPortal());
         StartCoroutine(ClosePortal());
     }
@@ -46,7 +44,7 @@ public class Portal : MonoBehaviour
         Destroy(fx, 0.5f);
         Destroy(fx2, 0.5f);
 
-        this.gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 
     IEnumerator OpenPortal()
@@ -62,7 +60,7 @@ public class Portal : MonoBehaviour
 
         GameObject fx = Instantiate(openFx);
         fx.transform.position = transform.position;
-        Destroy(fx, 1f);
+        Destroy(fx, 2f);
     }
 
     IEnumerator ClosePortal()

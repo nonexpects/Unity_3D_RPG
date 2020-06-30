@@ -29,8 +29,7 @@ public class MagicBallController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerController>().Damaged(att);
-            Debug.Log("매직맞음!");
+            //other.gameObject.GetComponent<PlayerController>().Damaged(att);
         }
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;

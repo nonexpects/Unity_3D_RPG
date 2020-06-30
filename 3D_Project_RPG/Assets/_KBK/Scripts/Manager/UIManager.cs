@@ -11,8 +11,11 @@ public class UIManager : MonoBehaviour
     public Image hpBar;
     public Image expBar;
     public Text lvText;
+    //public Text posText;
 
     bool playerDead;
+
+    GameObject p;
 
     //플레이어 죽음
     public GameObject dieScene;
@@ -22,6 +25,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        p = GameObject.FindGameObjectWithTag("Player");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         dieImage = dieScene.GetComponent<Image>();
         dietext = dieScene.GetComponentInChildren<TextMeshProUGUI>();
@@ -37,6 +41,7 @@ public class UIManager : MonoBehaviour
         hpBar.fillAmount = player.PlayerHp / player.PlayerMaxHp;
         expBar.fillAmount = player.PlayerExp / player.PlayerMaxExp;
         lvText.text = "LV " + player.PlayerLv;
+        //posText.text = "x : " + p.transform.position.x + " y : " + p.transform.position.y + " z : " + p.transform.position.z;
     }
 
     public void PlayerDeadScene()

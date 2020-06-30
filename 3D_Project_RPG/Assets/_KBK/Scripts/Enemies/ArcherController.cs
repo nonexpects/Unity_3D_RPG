@@ -23,7 +23,7 @@ public class ArcherController : EnemyFSM
         
         for (int i = 0; i < maxArrow; i++)
         {
-            GameObject ar = Instantiate(arrowPrefab);
+            GameObject ar = Instantiate(arrowPrefab,transform);
             arrows.Add(ar);
         }
     }

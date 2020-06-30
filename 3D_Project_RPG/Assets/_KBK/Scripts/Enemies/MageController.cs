@@ -9,21 +9,25 @@ public class MageController : EnemyFSM
     int maxArrow = 8;
     List<GameObject> magicBall;
 
+    GameObject castFx1, castFx2;
+
     protected override void Start()
     {
         maxHp = 10f;
          
-        attTime = 3f;
+        attTime = 2.5f;
 
         attackRange = 8f;
 
         magicBall = new List<GameObject>();
+        castFx1 = Resources.Load("Fx/MageCast") as GameObject;
+        castFx2 = Resources.Load("Fx/MageCastSphere") as GameObject;
 
         base.Start();
 
         for (int i = 0; i < maxArrow; i++)
         {
-            GameObject ar = Instantiate(magicBallPrefab);
+            GameObject ar = Instantiate(magicBallPrefab, transform);
             ar.SetActive(false);
             magicBall.Add(ar);
         }
@@ -55,6 +59,7 @@ public class MageController : EnemyFSM
             // - 상태 변경
             state = EnemyState.Attack;
             // - 상태 전환 출력
+            //anim.SetTrigger("Attack");
             print("Change State Move to Attack State");
         }
     }
@@ -71,8 +76,17 @@ public class MageController : EnemyFSM
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                Debug.Log("매직캐스트!");
+                //차징 FX
+                GameObject fx1 = Instantiate(castFx1, transform);
+                fx1.transform.position = transform.position;
+                GameObject fx2 = Instantiate(castFx2, transform);
+                fx2.transform.position = transform.position + new Vector3(0, 1, 0);
+
+                Destroy(fx1, 1f);
+                Destroy(fx2, 1f);
+
                 anim.SetTrigger("Attack");
+
                 Invoke("MagicCast", 0.9f);
 
                 //타이머 초기화
@@ -103,4 +117,5 @@ public class MageController : EnemyFSM
             }
         }
     }
+    
 }
