@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &3720801404062223931
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720325956504039319}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.72985977, y: 0.82855505, z: 0.18506597}
+  m_Center: {x: 0.000000002254335, y: -0.76891166, z: 0.00000050144337}
+--- !u!114 &3720801404062223930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720325956504039319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147492d065c91b743a91d6ff3c1e9712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WeaponDamage: 4
+  hitFx: {fileID: 0}
 --- !u!1 &3720801403366665169
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +107,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.64788544
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -204,33 +231,6 @@ MonoBehaviour:
   joystick: {fileID: 0}
   attStack: 0
   isAttacking: 0
---- !u!65 &3720801404062223931
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3720325956504039319}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.72985977, y: 0.82855505, z: 0.18506597}
-  m_Center: {x: 0.000000002254335, y: -0.76891166, z: 0.00000050144337}
---- !u!114 &3720801404062223930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3720325956504039319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147492d065c91b743a91d6ff3c1e9712, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponDamage: 4
-  hitFx: {fileID: 0}
 --- !u!1001 &3720801404694360477
 PrefabInstance:
   m_ObjectHideFlags: 0

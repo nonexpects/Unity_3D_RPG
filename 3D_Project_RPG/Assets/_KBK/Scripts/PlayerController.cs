@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-
 public class PlayerController : MonoBehaviour
 {
 
@@ -14,6 +13,9 @@ public class PlayerController : MonoBehaviour
 
     //캐릭터 컨트롤러 
     CharacterController cc;
+
+    //레이캐스트
+    RaycastHit hit;
 
     /// 이동 및 점프 관련 변수
     public float speed = 5f;
@@ -113,6 +115,8 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * h * 90f * Time.deltaTime);
         if(cc.enabled) cc.Move(transform.TransformDirection(dir) * speed * Time.deltaTime);
 
+        //CheckRay();
+
         //애니메이터
         anim.SetFloat("Run", Mathf.Abs(v));
 
@@ -137,6 +141,21 @@ public class PlayerController : MonoBehaviour
         }
 
         CheckAttStack();
+
+        //if (Physics.Raycast(transform.position + transform.up, transform.forward, out hit, 2f, 1 << LayerMask.NameToLayer("NPC")))
+        //{
+        //    hit.collider.GetComponent<NPC_Parent>().isButtonOn = true;
+        //}
+    }
+
+    private void CheckRay()
+    {
+        
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position + transform.up, transform.forward * 5f);
     }
 
     private void CheckAttStack()

@@ -11,7 +11,7 @@ public class Portal : MonoBehaviour
     public GameObject portalOffFx;
     public GameObject portalOffFx2;
 
-    float speed = 12f;
+    float speed = 100f;
 
     bool portalClosed;
     
@@ -33,6 +33,7 @@ public class Portal : MonoBehaviour
 
     IEnumerator portalCloseFx()
     {
+        Debug.Log("포탈Close FX 시작");
         yield return null;
 
         GameObject fx = Instantiate(portalOffFx);
@@ -49,15 +50,17 @@ public class Portal : MonoBehaviour
 
     IEnumerator OpenPortal()
     {
-        Debug.Log("오픈 포탈");
+        Debug.Log(portal.transform.localScale.z);
         
         while (portal.transform.localScale.z < 1)
         {
             portal.transform.localScale = Vector3.Lerp(portal.transform.localScale, Vector3.one, Time.deltaTime * speed);
-
+            Debug.Log("포탈 열리는 중");
             yield return null;
         }
 
+        yield return new WaitForSeconds(0.1f);
+        Debug.Log("오픈 포탈 FX");
         GameObject fx = Instantiate(openFx);
         fx.transform.position = transform.position;
         Destroy(fx, 2f);
@@ -71,10 +74,10 @@ public class Portal : MonoBehaviour
         while (portal.transform.localScale.z >= 0)
         {
             portal.transform.localScale -= Vector3.one * Time.deltaTime * speed;
-
+            Debug.Log("포탈 닫히는 중");
             yield return null;
         }
-
+        Debug.Log("포탈 닫힘 ON");
         portalClosed = true;
     }
 }
