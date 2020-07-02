@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public bool playerDead;
     public int appearCheck;
+    public Dictionary<int, int> killCounter = new Dictionary<int, int>();
 
     GameObject[] bossChecker;
 
@@ -27,6 +28,12 @@ public class GameManager : MonoBehaviour
         }
 
         enemyList = new GameObject("EnemyList");
+
+        killCounter.Add(0, 0);
+        killCounter.Add(1, 0);
+        killCounter.Add(2, 0);
+        killCounter.Add(3, 0);
+        killCounter.Add(4, 0);
     }
     
     void Start()

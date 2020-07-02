@@ -13,6 +13,8 @@ public class EnemySpawner : MonoBehaviour
 
     BoxCollider bc;
 
+    public int enemyDeadCount;
+
     bool isEnemyAlive = true;
 
     //List<Transform> enemySpawnPoint;

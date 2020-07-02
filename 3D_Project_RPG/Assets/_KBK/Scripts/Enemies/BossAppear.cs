@@ -6,6 +6,7 @@ public class BossAppear : MonoBehaviour
 {
     bool isAllEnemyDead;
     int count;
+    public int enemyId = 3;
 
     EnemySpawner[] checker;
 

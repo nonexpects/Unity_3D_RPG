@@ -28,6 +28,11 @@ public class Weapon : MonoBehaviour
             Destroy(fx, .5f);
             enemy.hitDamage(WeaponDamage);
         }
+        else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("BOSS"))
+        {
+            BossController boss = other.gameObject.GetComponent<BossController>();
+            boss.GetDamage(WeaponDamage);
+        }
         else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("CHEST"))
         {
             other.GetComponent<Chest>().BoxOpen();

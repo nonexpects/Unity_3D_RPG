@@ -11,6 +11,7 @@ public class ArcherController : EnemyFSM
 
     protected override void Start()
     {
+        enemyId = 1;
         maxHp = 10f;
         att = 2;
         attTime = 1.5f;

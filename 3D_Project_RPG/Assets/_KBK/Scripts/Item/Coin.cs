@@ -20,7 +20,7 @@ public class Coin : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
-            Debug.Log(" 코인 머거따 ");
+            other.gameObject.GetComponent<PlayerController>().GetGold(10);
             GameObject fx = Instantiate(earnFx);
             fx.transform.position = transform.position;
 

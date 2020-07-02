@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     //애니메이터 
     Animator anim;
-
+    
     //HP
     float currHp;
     public float PlayerHp
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     float maxHp { get; set; }
-    public float PlayerMaxHp { get; }
+    public float PlayerMaxHp { get { return maxHp; } }
 
     //EXP
     float currExp { get; set; }
@@ -56,12 +56,26 @@ public class PlayerController : MonoBehaviour
         {
             currExp += value;
             if (currExp > maxExp)
-                currExp = maxExp;
+            {
+                currExp -= maxExp;
+                currLv++;
+            }
         }
     }
     float maxExp = 30;
-    public float PlayerMaxExp { get; }
-    
+    public float PlayerMaxExp { get { return maxExp; } }
+
+    //GOLD
+    int gold { get; set; }
+    public int PlayerGold
+    {
+        get { return gold; }
+        set
+        {
+            gold += value;
+        }
+    }
+
     // 레벨
     int currLv;
     public int PlayerLv { get { return currLv; } }
@@ -141,21 +155,7 @@ public class PlayerController : MonoBehaviour
         }
 
         CheckAttStack();
-
-        //if (Physics.Raycast(transform.position + transform.up, transform.forward, out hit, 2f, 1 << LayerMask.NameToLayer("NPC")))
-        //{
-        //    hit.collider.GetComponent<NPC_Parent>().isButtonOn = true;
-        //}
-    }
-
-    private void CheckRay()
-    {
         
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawRay(transform.position + transform.up, transform.forward * 5f);
     }
 
     private void CheckAttStack()
@@ -191,39 +191,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void getExp(int value)
+    public void GetExp(int value)
     {
-        currExp += value;
-        if (currExp >= maxExp)
-        {
-            currExp = 0;
-            currLv++;
-        }
+        PlayerExp = value;
     }
 
-    public void getHp(int value)
+    public void GetHp(int value)
     {
-        currHp += value;
-        if (currHp >= maxHp)
-        {
-            currHp = maxHp;
-        }
+        PlayerHp = value;
+    }
+
+    public void GetGold(int value)
+    {
+        PlayerGold = value;
     }
 
     private void Die()
     {
         cc.enabled = false;
         anim.SetTrigger("Die");
-        //StartCoroutine(DieProc());
-        
-        Debug.Log("주거따");
     }
-
-    //IEnumerator DieProc()
-    //{
-    //
-    //    yield return null;
-    //}
+    
 
     public void Attack()
     {
@@ -246,8 +234,7 @@ public class PlayerController : MonoBehaviour
                 attStack = 4;
             }
         }
-
-        //Debug.Log("Attack Stack : " + attStack);
+        
     }
 
     IEnumerator Attacking()

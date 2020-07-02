@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class UIManager : MonoBehaviour
 {
     PlayerController player;
     public Image hpBar;
     public Image expBar;
+    public Text goldText;
     public Text lvText;
     //public Text posText;
 
@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
         hpBar.fillAmount = player.PlayerHp / player.PlayerMaxHp;
         expBar.fillAmount = player.PlayerExp / player.PlayerMaxExp;
         lvText.text = "LV " + player.PlayerLv;
+        goldText.text = player.PlayerGold.ToString("000");
         //posText.text = "x : " + p.transform.position.x + " y : " + p.transform.position.y + " z : " + p.transform.position.z;
     }
 

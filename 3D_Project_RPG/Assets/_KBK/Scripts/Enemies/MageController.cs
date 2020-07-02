@@ -10,9 +10,11 @@ public class MageController : EnemyFSM
     List<GameObject> magicBall;
 
     GameObject castFx1, castFx2;
-
+    
     protected override void Start()
     {
+        enemyId = 2;
+
         maxHp = 10f;
          
         attTime = 2.5f;
@@ -40,8 +42,6 @@ public class MageController : EnemyFSM
         {
             // - 상태 변경
             state = EnemyState.Return;
-            // - 상태 전환 출력
-            print("Change State Move to Return State");
         }
         //moveRange를 벗어나지 않고 공격범위에 있지도 않음
         else if (Vector3.Distance(transform.position, player.transform.position) > attackRange)
@@ -60,7 +60,6 @@ public class MageController : EnemyFSM
             state = EnemyState.Attack;
             // - 상태 전환 출력
             //anim.SetTrigger("Attack");
-            print("Change State Move to Attack State");
         }
     }
 
@@ -97,8 +96,6 @@ public class MageController : EnemyFSM
         {
             // - 상태 변경
             state = EnemyState.Move;
-            // - 상태 전환 출력
-            print("Change State Attack to Move State");
             timer = 0f;
         }
     }

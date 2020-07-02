@@ -28,8 +28,9 @@ public class EnemyFSM : MonoBehaviour
     protected float moveSpeed;
     protected float returnSpeed;
 
-                    
+
     /// 몬스터 일반 변수
+    protected int enemyId;
     protected float currHp;
     protected float maxHp;
     protected int att;      //공격력
@@ -98,9 +99,6 @@ public class EnemyFSM : MonoBehaviour
         {
             // - 상태 변경
             state = EnemyState.Move;
-            // - 상태 전환 출력
-            print("Change State Idle to Move State");
-
             anim.SetTrigger("Move");
         }
     }
@@ -113,8 +111,6 @@ public class EnemyFSM : MonoBehaviour
             // - 상태 변경
             state = EnemyState.Return;
             anim.SetTrigger("Move");
-            // - 상태 전환 출력
-            print("Change State Move to Return State");
             
         }
         //moveRange를 벗어나지 않고 공격범위에 있지도 않음
@@ -133,8 +129,6 @@ public class EnemyFSM : MonoBehaviour
             // - 상태 변경
             state = EnemyState.Attack;
             anim.SetTrigger("Idle");
-            // - 상태 전환 출력
-            print("Change State Move to Attack State");
         }
     }
 
@@ -160,9 +154,6 @@ public class EnemyFSM : MonoBehaviour
             // - 상태 변경
             state = EnemyState.Idle;
             anim.SetTrigger("Idle");
-            
-            // - 상태 전환 출력
-            print("Change State Return to Idle State");
         }
     }
 
@@ -179,8 +170,6 @@ public class EnemyFSM : MonoBehaviour
         if (currHp > 0)
         {
             state = EnemyState.Damaged;
-            print("상태 : EnemyState -> Damaged");
-            print("HP : " + currHp);
             anim.SetTrigger("Damaged");
 
             Damaged();
@@ -188,7 +177,6 @@ public class EnemyFSM : MonoBehaviour
         else
         {
             state = EnemyState.Die;
-            print("상태 : EnemyState -> Die");
             anim.SetTrigger("Die");
             Die();
         }
@@ -204,7 +192,7 @@ public class EnemyFSM : MonoBehaviour
     {
         //혹시 진행중인 모든 코루틴을 정지한다
         StopAllCoroutines();
-        player.GetComponent<PlayerController>().getExp(10);
+        player.GetComponent<PlayerController>().GetExp(10);
         StartCoroutine(DieProc());
 
     }
@@ -217,7 +205,6 @@ public class EnemyFSM : MonoBehaviour
         //상태 전환하기
         state = EnemyState.Move;
         anim.SetTrigger("Move");
-        print("상태 전환 : Damaged -> Move");
     }
 
     IEnumerator DieProc()
@@ -231,6 +218,8 @@ public class EnemyFSM : MonoBehaviour
         fx.transform.position = transform.position;
         Destroy(fx, 1f);
         Destroy(this.gameObject);
+
+        GameManager.instance.killCounter[enemyId]++;
     }
 
     //시각적으로 범위 표시

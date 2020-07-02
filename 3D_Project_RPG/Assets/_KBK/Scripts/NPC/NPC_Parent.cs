@@ -20,8 +20,9 @@ public class NPC_Parent : MonoBehaviour
 
     [HideInInspector]
     public Quest quest = null;
-    [HideInInspector]
-    public PlayerController player;
+    
+
+    protected int questId;
 
     //퀘스트 UI Text
     List<Text> questText;
@@ -30,10 +31,9 @@ public class NPC_Parent : MonoBehaviour
     {
         questButton = GameObject.Find("QuestButton");
         questWin = Instantiate(windowPrefab);
-        questWin.transform.parent = GameObject.Find("Canvas").transform;
+        questWin.transform.SetParent(GameObject.Find("Canvas").transform);
         questWin.SetActive(false);
         
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         cam = Camera.main;
 
         questText = new List<Text>();
@@ -46,9 +46,9 @@ public class NPC_Parent : MonoBehaviour
         
     }
     
-    protected virtual void SetQuest(string name, string desc, int exp, int gold)
+    protected virtual void SetQuest(int i, QuestData data, string name, string desc, int exp, int gold)
     {
-        quest = new Quest(name, desc, exp, gold);
+        quest = new Quest(i, data, name, desc, exp, gold);
 
         questWin.GetComponentsInChildren<Text>(questText);
         acceptButton = questWin.GetComponentInChildren<Button>();
@@ -57,12 +57,13 @@ public class NPC_Parent : MonoBehaviour
         questText[1].text = desc;
         questText[2].text = exp.ToString();
         questText[3].text = gold.ToString();
+
+        QuestManager.instance.AddQuest(questId, quest);
     }
-    
+
     public void QuestOpen()
     {
         npcCam.enabled= true;
-
         questButton.SetActive(false);
         questWin.SetActive(true);
     }
@@ -72,8 +73,7 @@ public class NPC_Parent : MonoBehaviour
         if(quest!= null)
         {
             questWin.SetActive(false);
-            quest.isActive = true;
-
+            QuestManager.instance.QuestActive(questId);
             ActivatorOff();
         }
     }
@@ -82,10 +82,28 @@ public class NPC_Parent : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
-            questButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            questButton.GetComponent<Button>().onClick.AddListener(QuestOpen);
-            questButton.SetActive(true);
+            switch (QuestManager.instance.allQuest[questId].questData.state)
+            {
+                case QuestState.Ready:
+                    questButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                    questButton.GetComponent<Button>().onClick.AddListener(QuestOpen);
+                    questButton.SetActive(true);
+                    break;
+                case QuestState.Clear:
+                    questButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                    questButton.GetComponent<Button>().onClick.AddListener(QuestReward);
+                    questButton.SetActive(true);
+                    break;
+            }
+
         }
+    }
+
+    public void QuestReward()
+    {
+        QuestManager.instance.QuestCompleted(questId);
+
+        ActivatorOff();
     }
 
     protected virtual void OnTriggerExit(Collider other)

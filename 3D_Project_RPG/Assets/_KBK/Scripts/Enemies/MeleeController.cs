@@ -6,8 +6,9 @@ public class MeleeController : EnemyFSM
 {
     protected override void Start()
     {
+        enemyId = 0;
         maxHp = 10f;
-        att = 5;
+        att = 2;
         attTime = 1f;
         moveSpeed = 3f;
         returnSpeed = 2f;
@@ -30,8 +31,7 @@ public class MeleeController : EnemyFSM
             timer += Time.deltaTime;
             if (timer > attTime)
             {
-                //player.GetComponent<PlayerController>().Damaged(att);
-                Debug.Log("밀리어택!");
+                player.GetComponent<PlayerController>().Damaged(att);
                 anim.SetTrigger("Attack");
                 //타이머 초기화
                 timer = 0f;
@@ -43,7 +43,6 @@ public class MeleeController : EnemyFSM
             state = EnemyState.Move;
             anim.SetTrigger("Move");
             // - 상태 전환 출력
-            print("Change State Attack to Move State");
             timer = 0f;
         }
     }
@@ -68,9 +67,6 @@ public class MeleeController : EnemyFSM
             // - 상태 변경
             state = EnemyState.Idle;
             anim.SetTrigger("Idle");
-
-            // - 상태 전환 출력
-            print("Change State Return to Idle State");
         }
     }
 }
