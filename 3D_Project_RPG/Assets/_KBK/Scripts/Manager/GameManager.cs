@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         bossChecker = GameObject.FindGameObjectsWithTag("Respawn");
         boss = GameObject.FindGameObjectWithTag("Boss");
+        boss.GetComponent<BossController>().state = BossState.Hide;
         boss.SetActive(false);
     }
     
@@ -49,6 +50,9 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Boss Appear!!");
             appearCheck = 0;
+            
+            boss.GetComponent<BossController>().state = BossState.Appear;
+            //boss.GetComponent<BossController>().Appear();
             boss.SetActive(true);
         }
     }

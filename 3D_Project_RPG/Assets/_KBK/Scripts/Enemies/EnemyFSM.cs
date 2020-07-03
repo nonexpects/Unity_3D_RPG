@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 몬스터 상태 enum문
+public enum EnemyState
+{
+    Idle,
+    Move,
+    Attack,
+    Damaged,
+    Return,
+    Die
+}
+
 public class EnemyFSM : MonoBehaviour
 {
-    // 몬스터 상태 enum문
-    public enum EnemyState
-    {
-        Idle,
-        Move,
-        Attack,  
-        Damaged,
-        Return,
-        Die
-    }
-
+    
     public EnemyState state; //몬스터 상태변수
 
     protected Vector3 spawnPos;

@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class NPC_Parent : MonoBehaviour
 {
-    
+
     //public Transform npcCamPos;
+
+    Vector3 winPos = new Vector3(200, 0);
 
     public Camera npcCam;
     protected Camera cam;
@@ -31,7 +33,6 @@ public class NPC_Parent : MonoBehaviour
     {
         questButton = GameObject.Find("QuestButton");
         questWin = Instantiate(windowPrefab);
-        questWin.transform.SetParent(GameObject.Find("Canvas").transform);
         questWin.SetActive(false);
         
         cam = Camera.main;
@@ -43,7 +44,9 @@ public class NPC_Parent : MonoBehaviour
     protected virtual void Start()
     {
         if (questButton.activeSelf) questButton.SetActive(false);
-        
+        questWin.transform.SetParent(GameObject.Find("Canvas").transform);
+        questWin.transform.localPosition = winPos;
+        questWin.transform.localScale = Vector3.one;
     }
     
     protected virtual void SetQuest(int i, QuestData data, string name, string desc, int exp, int gold)
