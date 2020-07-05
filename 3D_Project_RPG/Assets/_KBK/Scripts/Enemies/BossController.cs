@@ -18,6 +18,7 @@ public class BossController : MonoBehaviour
 
     GameObject player;
     public GameObject quadPrefab;
+    public GameObject hpBarPrefab;
     Projector pj;
 
     Animator anim;
@@ -36,8 +37,8 @@ public class BossController : MonoBehaviour
     WaitForSeconds p3 = new WaitForSeconds(7f);
     WaitForSeconds p4 = new WaitForSeconds(11f);
 
-    float currHp;
-    float maxHp = 60;
+    public float currHp;
+    public float maxHp = 80;
     
     bool isAppear;
     
@@ -72,13 +73,15 @@ public class BossController : MonoBehaviour
             case BossState.Phase1:
                 if(currHp < 40f)
                 {
+                    Debug.Log("Phase 2");
                     state = BossState.Phase2;
                     StartCoroutine(Attack02());
                 }
                 break;
             case BossState.Phase2:
-                if (currHp < 40f)
+                if (currHp < 20f)
                 {
+                    Debug.Log("Phase 3");
                     state = BossState.Phase3;
                     StartCoroutine(Attack03());
                 }
@@ -101,6 +104,7 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         state = BossState.Phase1;
         //이걸로 수정확인
+        Debug.Log("Phase 1");
         StartCoroutine(Attack02());
     }
 
@@ -114,14 +118,14 @@ public class BossController : MonoBehaviour
             {
                 GameObject b = PickUpBullet();
 
-                float angle = 360f - (50f / p2MaxBall);
-                
-                b.transform.position = transform.position + transform.up;
+                float angle = 360f - (50f / p2MaxBall);//360f - (50f / p2MaxBall);
+
+                b.transform.position = transform.position + transform.up + transform.forward;
                 //랜덤으로 방향 바꾸기
                 if (a == 0)
-                    b.transform.localEulerAngles = new Vector3(0, 360f - (i * angle - 110f), 0);
+                    b.transform.localEulerAngles = new Vector3(0, 360f - (i * angle - 110f), 0); //360f - (i * angle - 110f)
                 else
-                    b.transform.localEulerAngles = new Vector3(0, i * angle - 25f, 0);
+                    b.transform.localEulerAngles = new Vector3(0, i * angle - 25f, 0); //i * angle - 25f
 
                 b.SetActive(true);
 
@@ -142,9 +146,10 @@ public class BossController : MonoBehaviour
 
             for (int i = 0; i < range.Length; i++)
             {
-                range[i] = new Vector3(6f + Random.insideUnitCircle.x * 5f, 0, Random.insideUnitCircle.y * 5f);
+                range[i] = transform.position + new Vector3(6f + Random.insideUnitCircle.x * 5f, 0, Random.insideUnitCircle.y * 5f);
+                range[i].y = 0.015f;
                 GameObject q = Instantiate(quadPrefab);
-                q.transform.position = transform.position + range[i];
+                q.transform.position = range[i];
                 Destroy(q, 4f);
             }
 
@@ -189,4 +194,5 @@ public class BossController : MonoBehaviour
 
         return null;
     }
+
 }

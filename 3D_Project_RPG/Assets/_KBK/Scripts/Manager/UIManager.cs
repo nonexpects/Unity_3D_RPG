@@ -8,10 +8,13 @@ public class UIManager : MonoBehaviour
 {
     PlayerController player;
     public Image hpBar;
+    public Text hpText;
     public Image expBar;
     public Text goldText;
     public Text lvText;
     //public Text posText;
+
+    public GameObject bossHpBar;
 
     bool playerDead;
 
@@ -33,6 +36,7 @@ public class UIManager : MonoBehaviour
         PlayerController.OnPlayerDead += PlayerDeadScene;
 
         dieScene.SetActive(false);
+        bossHpBar.SetActive(false);
     }
 
     // Update is called once per frame
@@ -42,6 +46,8 @@ public class UIManager : MonoBehaviour
         expBar.fillAmount = player.PlayerExp / player.PlayerMaxExp;
         lvText.text = "LV " + player.PlayerLv;
         goldText.text = player.PlayerGold.ToString("000");
+        hpText.text = "HP " + player.PlayerHp.ToString() + " / " + player.PlayerMaxHp.ToString();
+        
         //posText.text = "x : " + p.transform.position.x + " y : " + p.transform.position.y + " z : " + p.transform.position.z;
     }
 

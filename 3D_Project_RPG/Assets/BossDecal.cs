@@ -6,18 +6,21 @@ public class BossDecal : MonoBehaviour
 {
     float currTime;
     float maxTime = 0.5f;
+    
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
+            Debug.Log("걸렸다");
             currTime += Time.deltaTime;
-            if(currTime > maxTime)
+            if (currTime > maxTime)
             {
-                other.gameObject.GetComponent<PlayerController>().Damaged(1);
+                other.gameObject.GetComponent<PlayerController>().Damaged(2);
                 currTime = 0f;
             }
         }
+
     }
-    
+
 }

@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5242410079232584285}
   - component: {fileID: 3986616172302994159}
+  - component: {fileID: 1551971951}
+  - component: {fileID: 1551971952}
+  - component: {fileID: 1551971954}
+  - component: {fileID: 1551971953}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Boss
@@ -44,10 +48,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a9073b0774d0cf4bb146a2aaf1c8b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
+  quadPrefab: {fileID: 572873914677987393, guid: 6bcb0e2ce9283894ebaaff744fed83c1,
+    type: 3}
   fromPortal: {fileID: 0}
   toPortal: {fileID: 372839666431321228, guid: ab9ba4c9d85ba1a488ff1985e4af7b04, type: 3}
   enemyId: 3
+  ballPrefab: {fileID: 1067566229714356550, guid: 7ebcf296ec7383941bb4152dcb388a8f,
+    type: 3}
+--- !u!111 &1551971951
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780937490163412321}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: e9f8ec4a7ab0c7744a6b5af865c04863, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: e9f8ec4a7ab0c7744a6b5af865c04863, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!119 &1551971952
+Projector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780937490163412321}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_NearClipPlane: 0.1
+  m_FarClipPlane: 50
+  m_FieldOfView: 60
+  m_AspectRatio: 1
+  m_Orthographic: 0
+  m_OrthographicSize: 10
+  m_Material: {fileID: 2100000, guid: 1d7bda2b49b9de64abc349218f7119f3, type: 2}
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 16183
+--- !u!54 &1551971954
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780937490163412321}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1551971953
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780937490163412321}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7688319, y: 1.6330757, z: 0.78929204}
+  m_Center: {x: -0.0027099252, y: 0.8175666, z: -0.03718376}
 --- !u!1001 &8265169968299799881
 PrefabInstance:
   m_ObjectHideFlags: 0

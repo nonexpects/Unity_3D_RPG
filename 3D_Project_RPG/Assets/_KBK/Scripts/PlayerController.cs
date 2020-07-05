@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        maxHp = 20;
+        maxHp = 30;
         maxExp = 30;
         currLv = 1;
 
