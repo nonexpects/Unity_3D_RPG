@@ -7,8 +7,11 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     PlayerController player;
+    BossController boss;
     public Image hpBar;
+    Image bossHp;
     public Text hpText;
+    Text bossHpText;
     public Image expBar;
     public Text goldText;
     public Text lvText;
@@ -17,6 +20,7 @@ public class UIManager : MonoBehaviour
     public GameObject bossHpBar;
 
     bool playerDead;
+    bool bossAppear;
 
     GameObject p;
 
@@ -26,6 +30,10 @@ public class UIManager : MonoBehaviour
     TextMeshProUGUI dietext;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        boss = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossController>();
+    }
     void Start()
     {
         p = GameObject.FindGameObjectWithTag("Player");
@@ -33,7 +41,11 @@ public class UIManager : MonoBehaviour
         dieImage = dieScene.GetComponent<Image>();
         dietext = dieScene.GetComponentInChildren<TextMeshProUGUI>();
 
+        bossHp = bossHpBar.GetComponentsInChildren<Image>()[2];
+        bossHpText = bossHpBar.GetComponentInChildren<Text>();
+
         PlayerController.OnPlayerDead += PlayerDeadScene;
+        BossController.BossAppearance += BossHpBarAppear;
 
         dieScene.SetActive(false);
         bossHpBar.SetActive(false);
@@ -47,7 +59,12 @@ public class UIManager : MonoBehaviour
         lvText.text = "LV " + player.PlayerLv;
         goldText.text = player.PlayerGold.ToString("000");
         hpText.text = "HP " + player.PlayerHp.ToString() + " / " + player.PlayerMaxHp.ToString();
-        
+        if(bossAppear)
+        {
+            bossHp.fillAmount = boss.currHp / boss.maxHp;
+            bossHpText.text = "HP " + boss.currHp.ToString() + " / " + boss.maxHp.ToString();
+        }
+
         //posText.text = "x : " + p.transform.position.x + " y : " + p.transform.position.y + " z : " + p.transform.position.z;
     }
 
@@ -100,5 +117,11 @@ public class UIManager : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void BossHpBarAppear()
+    {
+        bossHpBar.SetActive(true);
+        bossAppear = true;
     }
 }

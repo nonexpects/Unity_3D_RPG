@@ -14,33 +14,40 @@ public enum BossState
 
 public class BossController : MonoBehaviour
 {
+    public delegate void BossAppearEvent();
+
+    public static event BossAppearEvent BossAppearance;
+
     public BossState state;
 
     GameObject player;
     public GameObject quadPrefab;
-    public GameObject hpBarPrefab;
     Projector pj;
+
+    public Transform[] movePosition;
 
     Animator anim;
     Animation appearAnim;
-    
+    LineRenderer lr;
+
     public GameObject fromPortal;
     public GameObject toPortal;
     public int enemyId = 3;
     int p2MaxBall = 5;
 
-    public GameObject ballPrefab;
-    List<GameObject> balls = new List<GameObject>();
+    WaitForSeconds wfsAttDelay = new WaitForSeconds(0.2f);
+    WaitForSeconds wfsAtt1 = new WaitForSeconds(2f);
+    WaitForSeconds wfsAtt2 = new WaitForSeconds(9f);
+    WaitForSeconds wfsAtt3 = new WaitForSeconds(5f);
 
-    WaitForSeconds p1 = new WaitForSeconds(0.2f);
-    WaitForSeconds p2 = new WaitForSeconds(2f);
-    WaitForSeconds p3 = new WaitForSeconds(7f);
-    WaitForSeconds p4 = new WaitForSeconds(11f);
+    public Transform beamStartPos;
 
     public float currHp;
     public float maxHp = 80;
     
     bool isAppear;
+
+    public BossBulletPool bullets;
     
     void Start()
     {
@@ -48,17 +55,15 @@ public class BossController : MonoBehaviour
         currHp = maxHp;
         anim = GetComponentInChildren<Animator>();
         appearAnim = GetComponentInChildren<Animation>();
+
+        lr = GetComponent<LineRenderer>();
+        lr.startWidth = 0.4f;
+        lr.enabled = false;
+        lr.SetColors(Color.red, Color.yellow);
+
         pj = GetComponent<Projector>();
         pj.enabled = false;
-
-        //오브젝트 풀링
-        for (int i = 0; i < 30; i++)
-        {
-            GameObject ball = Instantiate(ballPrefab, transform);
-            ball.SetActive(false);
-            balls.Add(ball);
-        }
-
+        
         player = GameObject.FindGameObjectWithTag("Player");
         
     }
@@ -93,6 +98,10 @@ public class BossController : MonoBehaviour
     {
         if (isAppear) return;
 
+        Vector3 dir = (player.transform.position - transform.position).normalized;
+        dir.y = 0;
+        transform.forward = dir;
+
         isAppear = true;
         StartCoroutine(AppearProc());
     }
@@ -106,6 +115,7 @@ public class BossController : MonoBehaviour
         //이걸로 수정확인
         Debug.Log("Phase 1");
         StartCoroutine(Attack02());
+        BossAppearance();
     }
 
     IEnumerator Attack01 ()
@@ -113,26 +123,81 @@ public class BossController : MonoBehaviour
         while(currHp > 0)
         {
             int a = Random.Range(0, 2);
-
+            anim.SetTrigger("Attack2");
+            float angle = (50f / p2MaxBall);//360f - (50f / p2MaxBall);
             for (int i = 0; i < p2MaxBall; i++)
             {
-                GameObject b = PickUpBullet();
 
-                float angle = 360f - (50f / p2MaxBall);//360f - (50f / p2MaxBall);
+                //Vector3 dr = (transform.forward - transform.right).normalized;
 
-                b.transform.position = transform.position + transform.up + transform.forward;
-                //랜덤으로 방향 바꾸기
-                if (a == 0)
-                    b.transform.localEulerAngles = new Vector3(0, 360f - (i * angle - 110f), 0); //360f - (i * angle - 110f)
-                else
-                    b.transform.localEulerAngles = new Vector3(0, i * angle - 25f, 0); //i * angle - 25f
+                //if(transform.rotation.y > 0f || transform.rotation.y < 200f)
+                //{
+                //    Debug.Log("y가 0이상");
+                //    b.transform.eulerAngles = new Vector3(0, 360f - (i * angle), 0); //360f - (i * angle - 110f)
+                //}
+                //else
+                //{
+                //    //랜덤으로 방향 바꾸기
+                //    if (a == 0)
+                //    {
+                //        Debug.Log("a=0");
+                //        b.transform.localEulerAngles = new Vector3(0, 360f - (i * angle), 0); //360f - (i * angle - 110f)
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("a=1");
+                //        b.transform.eulerAngles = new Vector3(0, i * angle, 0); //i * angle - 25f
+                //    }
+                //}
 
-                b.SetActive(true);
+                //b.transform.eulerAngles = transform.eulerAngles + new Vector3(0, (i * angle), 0); //360f - (i * angle - 110f)
 
-                yield return p1;
+                //if (transform.rotation.y > 0f && transform.rotation.y < 0.5f)
+                //{
+                //    Debug.Log("a > 0");
+                //    b.transform.localRotation = Quaternion.Euler(0, transform.rotation.y - (i * angle) , 0) * Quaternion.Euler(transform.TransformDirection((transform.forward - transform.right).normalized));
+                //    //transform.eulerAngles = transform.forward - (i * angle);
+                //    //b.transform.localRotation = Quaternion.Euler(0, transform.+ ( i * angle) - 20f, 0);
+                //}
+                //else
+                //{
+                //    Debug.Log("a < 0");
+                //    Vector3 bDir = transform.eulerAngles + new Vector3(0, (i * angle) + 20f, 0);
+                //    b.transform.localRotation = Quaternion.Euler(0, bDir.y, 0) * Quaternion.Euler(transform.TransformDirection((transform.forward - transform.right).normalized));
+                //    //b.transform.localRotation = Quaternion.Euler(0, transform.rotation.y - (i * angle), 0) * Quaternion.Euler(transform.forward);
+                //    //Debug.Log("a < 0");
+                //    //b.transform.localRotation = Quaternion.Euler(0, (1 - transform.rotation.y) + (i * angle), 0);
+                //}
+                //b.transform.eulerAngles = Quaternion.Euler(0, (i * angle), 0 ) * transform.TransformDirection((transform.forward - transform.right).normalized); //
+                //b.transform.eulerAngles = transform.eulerAngles + new Vector3(0, i * angle + 10f, 0); //i * angle - 25f
+                
+                GameObject bullet = bullets.PickUpBullet();
+                bullet.transform.position = transform.position + transform.up + transform.forward;
+                //bullet.transform.forward = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + (i * angle), transform.eulerAngles.z);
+                bullet.transform.eulerAngles = transform.eulerAngles;
+                bullet.transform.Rotate(0f, angle * i - 20f, 0f);
+                //if (a == 0)
+                //{
+                //    bullet.transform.localEulerAngles = new Vector3(0, 360f - (i * angle), 0); //360f - (i * angle - 110f)
+                //}
+                //else
+                //{
+                //    bullet.transform.eulerAngles = new Vector3(0, i * angle, 0); //i * angle - 25f
+                //}
+
+                bullet.SetActive(true);
+
+                yield return wfsAttDelay;
             }
+            
+            yield return wfsAtt1;
+            
+            int p = Random.Range(0, 5);
+            transform.position = movePosition[p].position;
 
-            yield return p2;
+            Vector3 dir = (player.transform.position - transform.position).normalized;
+            dir.y = 0;
+            transform.forward = dir;
         }
 
     }
@@ -144,26 +209,39 @@ public class BossController : MonoBehaviour
         {
             Vector3[] range = new Vector3[3];
 
+            anim.SetTrigger("Attack3");
             for (int i = 0; i < range.Length; i++)
             {
-                range[i] = transform.position + new Vector3(6f + Random.insideUnitCircle.x * 5f, 0, Random.insideUnitCircle.y * 5f);
+                range[i] = transform.position + new Vector3(Random.insideUnitCircle.x * 8f, 0, Random.insideUnitCircle.y * 8f);
                 range[i].y = 0.015f;
                 GameObject q = Instantiate(quadPrefab);
                 q.transform.position = range[i];
-                Destroy(q, 4f);
+                Destroy(q, 6f);
             }
 
             pj.enabled = true;
             pj.transform.rotation = transform.rotation;
 
-            yield return p3;
+            yield return wfsAtt2;
         }
         
     }
 
     IEnumerator Attack03()
     {
-        yield return p4;
+        while(currHp > 0)
+        {
+            anim.SetTrigger("Attack1");
+
+            lr.enabled = true;
+
+            yield return new WaitForSeconds(0.7f);
+
+            lr.SetPosition(0, beamStartPos.position); //시작점Idx : 0
+            lr.SetPosition(1, player.transform.position); //시작점Idx : 0
+
+            yield return wfsAtt3;
+        }
     }
 
     public void GetDamage(int value)
@@ -184,15 +262,5 @@ public class BossController : MonoBehaviour
         fromPortal.SetActive(true);
     }
 
-    GameObject PickUpBullet()
-    {
-        foreach (GameObject item in balls)
-        {
-            if (!item.activeSelf)
-                return item;
-        }
-
-        return null;
-    }
-
+    
 }

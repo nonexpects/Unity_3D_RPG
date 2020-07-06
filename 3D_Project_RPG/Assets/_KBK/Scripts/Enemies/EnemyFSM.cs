@@ -45,6 +45,7 @@ public class EnemyFSM : MonoBehaviour
 
     protected GameObject deathFx;
 
+
     protected virtual void Start()
     { 
         //몬스터 상태 초기화
