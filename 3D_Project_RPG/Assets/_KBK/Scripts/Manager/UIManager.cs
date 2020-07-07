@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     Text bossHpText;
     public Image expBar;
     public Text goldText;
-    public Text lvText;
+    public TextMeshProUGUI lvText;
     //public Text posText;
 
     public GameObject bossHpBar;

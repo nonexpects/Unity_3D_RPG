@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 몬스터 상태 enum문
 public enum EnemyState
@@ -28,7 +29,9 @@ public class EnemyFSM : MonoBehaviour
     protected Animator anim;
     protected float moveSpeed;
     protected float returnSpeed;
-
+    protected SkinnedMeshRenderer[] smr;
+    protected GameObject damageText;
+    protected GameObject canvas;
 
     /// 몬스터 일반 변수
     protected int enemyId;
@@ -57,10 +60,13 @@ public class EnemyFSM : MonoBehaviour
         cc = GetComponent<CharacterController>();
 
         anim = GetComponentInChildren<Animator>();
-
+        canvas = GameObject.Find("DamageTextPos");
+        damageText = Resources.Load<GameObject>("DamageText");
         deathFx = Resources.Load("Fx/EnemyDeath") as GameObject;
 
         currHp = maxHp;
+
+        smr = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     void Update()
@@ -162,18 +168,26 @@ public class EnemyFSM : MonoBehaviour
     //플레이어쪽에서 충돌감지를 할 수 있으니 이 함수는 퍼블릭으로 만들자
     public void hitDamage(int value)
     {
+        StartCoroutine(SetDamagedMaterial());
+
         //예외처리
         if (state == EnemyState.Damaged || state == EnemyState.Die) return;
+        GameObject damage = Instantiate(damageText, canvas.transform);
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, Random.Range(250f, 300f), 0);
+        damage.transform.position = pos;
+        damage.GetComponent<Text>().text = "- " + value;
+        Destroy(damage, 0.5f);
+
 
         //체력깍기
         currHp -= value;
-
+        
         //몬스터의 체력이 1이상이면 피격상태
         if (currHp > 0)
         {
             state = EnemyState.Damaged;
             anim.SetTrigger("Damaged");
-
+            
             Damaged();
         }
         else
@@ -192,8 +206,14 @@ public class EnemyFSM : MonoBehaviour
 
     private void Die()
     {
+        for (int i = 0; i < smr.Length; i++)
+        {
+            smr[i].SetPropertyBlock(null);
+        }
+
         //혹시 진행중인 모든 코루틴을 정지한다
         StopAllCoroutines();
+        
         player.GetComponent<PlayerController>().GetExp(10);
         StartCoroutine(DieProc());
 
@@ -206,6 +226,7 @@ public class EnemyFSM : MonoBehaviour
         yield return new WaitForSeconds(1f);
         //상태 전환하기
         state = EnemyState.Move;
+        if(anim)
         anim.SetTrigger("Move");
     }
 
@@ -238,5 +259,20 @@ public class EnemyFSM : MonoBehaviour
         //이동 범위 표시
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(spawnPos, moveRange);
+    }
+
+    IEnumerator SetDamagedMaterial()
+    {
+        for (int i = 0; i < smr.Length; i++)
+        {
+            smr[i].SetPropertyBlock(GameManager.instance.mpb);
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < smr.Length; i++)
+        {
+            smr[i].SetPropertyBlock(null);
+        }
     }
 }

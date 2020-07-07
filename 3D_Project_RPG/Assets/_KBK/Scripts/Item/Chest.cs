@@ -9,6 +9,8 @@ public class Chest : MonoBehaviour
 
     GameObject[] items;
     List<GameObject> itemList;
+    GameObject[] fx;
+    public GameObject glowFx;
 
     int maxItemCount = 5;
 
@@ -21,6 +23,7 @@ public class Chest : MonoBehaviour
         mf = GetComponent<MeshFilter>();
         chestOpenMesh = Resources.Load("Model/Chest_Open") as Mesh;
         Object[] temp = Resources.LoadAll("Items");
+        fx = Resources.LoadAll<GameObject>("Fx/Chest");
 
         items = new GameObject[temp.Length];
         itemList = new List<GameObject>();
@@ -31,15 +34,17 @@ public class Chest : MonoBehaviour
             items[i] = it;
         }
 
+        GameObject fxAppear = Instantiate(fx[0]);
+        fxAppear.transform.position = transform.position;
+        Destroy(fxAppear, 2f);
     }
 
     public void BoxOpen()
     {
         if(!isBoxOpen)
         {
-            Debug.Log(" 박스 오픈 ");
             mf.sharedMesh = chestOpenMesh;
-
+            glowFx.SetActive(false);
             StartCoroutine(BoxProc());
         }
     }
@@ -47,6 +52,10 @@ public class Chest : MonoBehaviour
     IEnumerator BoxProc()
     {
         isBoxOpen = true;
+
+        GameObject fxOpen = Instantiate(fx[1]);
+        fxOpen.transform.position = transform.position;
+        Destroy(fxOpen, 1.5f);
 
         for (int i = 0; i < maxItemCount; i++)
         {

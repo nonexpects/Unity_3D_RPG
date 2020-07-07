@@ -59,7 +59,6 @@ public class EnemySpawner : MonoBehaviour
 
         if(!isEnemyAlive)
         {
-            Debug.Log("다사라졌다");
             Instantiate(boxPrefab, transform.position, Quaternion.identity);
 
             GameManager.instance.appearCheck++;

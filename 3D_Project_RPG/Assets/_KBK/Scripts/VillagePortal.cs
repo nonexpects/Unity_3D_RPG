@@ -7,6 +7,15 @@ public class VillagePortal : MonoBehaviour
     public Transform portalPoint;
     public GameObject portalFx;
 
+    Vector3 fromPoint;
+    Vector3 toPoint;
+
+    public VillagePortal(Vector3 fromPos, Vector3 toPos)
+    {
+        fromPoint = fromPos;
+        toPoint = toPos;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))

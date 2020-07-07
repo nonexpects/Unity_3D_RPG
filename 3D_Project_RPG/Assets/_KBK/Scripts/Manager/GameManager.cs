@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, int> killCounter = new Dictionary<int, int>();
 
     GameObject[] bossChecker;
+    BossController bossCtrl;
+    public MaterialPropertyBlock mpb;
 
     private void Awake() // => instance = this;
     {
@@ -34,14 +36,19 @@ public class GameManager : MonoBehaviour
         killCounter.Add(2, 0);
         killCounter.Add(3, 0);
         killCounter.Add(4, 0);
+
+        mpb = new MaterialPropertyBlock();
     }
     
     void Start()
     {
         bossChecker = GameObject.FindGameObjectsWithTag("Respawn");
         boss = GameObject.FindGameObjectWithTag("Boss");
-        boss.GetComponent<BossController>().state = BossState.Hide;
+        bossCtrl = boss.GetComponent<BossController>();
+        bossCtrl.state = BossState.Hide;
         boss.SetActive(false);
+        mpb.SetColor("_Color", Color.red);
+
     }
     
     void Update()
@@ -50,12 +57,16 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Boss Appear!!");
             appearCheck = 0;
-            
-            boss.GetComponent<BossController>().state = BossState.Appear;
+
+            bossCtrl.state = BossState.Appear;
             //boss.GetComponent<BossController>().Appear();
             boss.SetActive(true);
         }
     }
 
+    public void BossIsDead()
+    {
+
+    }
     
 }

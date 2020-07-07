@@ -31,17 +31,7 @@ public class BossBulletPool : MonoBehaviour
 
         return null;
     }
-
-    //public void CastMagicBall()
-    //{
-    //    GameObject ball = PickUpBullet();
-    //
-    //    ball.transform.position = transform.position + transform.up + (transform.forward * 2);
-    //    //b.transform.forward = (transform.position - player.transform.position).normalized;
-    //    ball.transform.eulerAngles = transform.eulerAngles + new Vector3(0, i * angle + 10f, 0);
-    //
-    //    ball.SetActive(true);
-    //}
+    
     
     void Update()
     {

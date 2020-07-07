@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a20fbd7fc7983747a210cd62ccae0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalFx: {fileID: 1209815176174424, guid: 6c4162965c7215f4a8c116238adb30ec, type: 3}
+  portalFx: {fileID: 1209815176174424, guid: 3ff5e053e16ec704e84be43afefabe11, type: 3}
   openFx: {fileID: 159062, guid: e4fc72c1b3da74d4697708bcd2a9db60, type: 3}
   portalOffFx: {fileID: 166782, guid: 7969f301e7947b548a4cec9175a7762e, type: 3}
   portalOffFx2: {fileID: 185518, guid: 2ef436b6c6313494daf190cd68ebf636, type: 3}

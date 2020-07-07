@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossDecal : MonoBehaviour
+public class BossProjector : MonoBehaviour
 {
     float currTime;
     float maxTime = 0.5f;
-    
+
 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
-            Debug.Log("걸렸다");
             currTime += Time.deltaTime;
             if (currTime > maxTime)
             {
@@ -22,5 +21,4 @@ public class BossDecal : MonoBehaviour
         }
 
     }
-
 }

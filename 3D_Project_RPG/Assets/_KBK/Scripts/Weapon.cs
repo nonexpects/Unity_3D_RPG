@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
     public int WeaponDamage = 5;
     PlayerController player;
     public GameObject hitFx;
-
+    
     TrailRenderer tr;
 
     private void Start()
@@ -21,16 +22,19 @@ public class Weapon : MonoBehaviour
     {
         if (player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("ENEMY"))
         {
-            Debug.Log("hit " + other.name);
             EnemyFSM enemy = other.gameObject.GetComponent<EnemyFSM>();
+            
+            enemy.GetComponentInChildren<SkinnedMeshRenderer>().SetPropertyBlock(GameManager.instance.mpb);
+            enemy.hitDamage(WeaponDamage);
+
             GameObject fx = Instantiate(hitFx);
             fx.transform.position = other.transform.position + new Vector3(0, 0.5f, 0);
-            Destroy(fx, .5f);
-            enemy.hitDamage(WeaponDamage);
+            Destroy(fx, .5f);            
         }
         else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("BOSS"))
         {
             BossController boss = other.gameObject.GetComponent<BossController>();
+            
             boss.GetDamage(WeaponDamage);
         }
         else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("CHEST"))

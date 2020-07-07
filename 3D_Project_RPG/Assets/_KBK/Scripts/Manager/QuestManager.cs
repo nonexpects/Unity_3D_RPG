@@ -27,6 +27,8 @@ public class QuestManager : MonoBehaviour
 
     Sprite[] questImage;
 
+    public Transform contents;
+
     Sprite completeImage;
     public GameObject questLogPrefab;
     public GameObject questcompletePrefab;
@@ -57,6 +59,7 @@ public class QuestManager : MonoBehaviour
             if(allQuest.ContainsKey(id))
             {
                 QuestLogMaker(id);
+                QuestLogMaker(id);
                 break;
             }
         }
@@ -65,7 +68,7 @@ public class QuestManager : MonoBehaviour
     void QuestLogMaker(int id)
     {
         QuestData data = allQuest[id].questData;
-        GameObject qlog = Instantiate(questLogPrefab, transform);
+        GameObject qlog = Instantiate(questLogPrefab, contents.transform);
         switch (data.questType)
         {
             case QuestType.Kill:

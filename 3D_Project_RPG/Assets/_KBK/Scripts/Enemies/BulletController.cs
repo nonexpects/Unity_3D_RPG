@@ -23,8 +23,6 @@ public class BulletController : MonoBehaviour
             currTime = 0f;
             //rg.velocity = Vector3.zero;
             gameObject.SetActive(false);
-
-            Debug.Log("Bullet DeActive : " + gameObject.name);
         }
     }
 
@@ -38,8 +36,6 @@ public class BulletController : MonoBehaviour
         transform.rotation = Quaternion.identity;
         //rg.velocity = Vector3.zero;
         gameObject.SetActive(false);
-
-        Debug.Log("Bullet DeActive : " + gameObject.name);
 
     }
 }

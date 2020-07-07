@@ -23,7 +23,6 @@ public class Potion_Hp : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
             other.gameObject.GetComponent<PlayerController>().GetHp(5);
-            Debug.Log(" 포션 머거따 ");
 
             GameObject fx = Instantiate(earnFx);
             GameObject fx2 = Instantiate(earnFx2);

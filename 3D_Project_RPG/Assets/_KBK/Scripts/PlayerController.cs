@@ -31,7 +31,10 @@ public class PlayerController : MonoBehaviour
 
     //애니메이터 
     Animator anim;
-    
+
+    GameObject damageText;
+    GameObject canvas;
+
     //HP
     float currHp;
     public float PlayerHp
@@ -90,12 +93,14 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        maxHp = 30;
+        maxHp = 50;
         maxExp = 30;
         currLv = 1;
 
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        damageText = Resources.Load<GameObject>("DamageText");
+        canvas = GameObject.Find("DamageTextPos");
 
         currHp = maxHp;
 
@@ -182,6 +187,13 @@ public class PlayerController : MonoBehaviour
 
     public void Damaged(int value)
     {
+        GameObject damage = Instantiate(damageText, canvas.transform);
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(Random.insideUnitCircle.x * 20, Random.insideUnitCircle.y * 20, 0);
+        damage.transform.position = pos;
+        damage.GetComponent<Text>().color = Color.red;
+        damage.GetComponent<Text>().text = "- " + value;
+        Destroy(damage, 0.5f);
+
         currHp -= value;
         if (currHp <= 0 && cc.enabled)
         {

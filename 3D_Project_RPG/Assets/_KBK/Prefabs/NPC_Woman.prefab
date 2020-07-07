@@ -41,7 +41,6 @@ MonoBehaviour:
   npcCam: {fileID: 7611260265270585665}
   windowPrefab: {fileID: 8691554128871143611, guid: f4e2bb1e9aa054a42aec68f52a082517,
     type: 3}
-  player: {fileID: 0}
 --- !u!1 &7611260265085041776
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +96,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7611260265270585671}
   m_LocalRotation: {x: -0.07845887, y: -0.85020095, z: 0.122320816, w: -0.5060041}
-  m_LocalPosition: {x: 172.884, y: 1.27, z: -25.208}
+  m_LocalPosition: {x: 172.89, y: 1.34, z: -25.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7611260265467140487}

@@ -45,10 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fedde1f8fc7db6348a4125dc39d06818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   findRange: 10
   moveRange: 15
   attackRange: 2
-  quiver: {fileID: 8217608293010973296}
   arrowPrefab: {fileID: 5903485977374236274, guid: 9cbf346e2e10fe445a1d2ed76519eed7,
     type: 3}
 --- !u!143 &366975125309075731
@@ -109,6 +109,14 @@ PrefabInstance:
     - target: {fileID: 1012295786354732, guid: 0462945a75b007c459ba1a3bcf18cacc, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1497313578861090, guid: 0462945a75b007c459ba1a3bcf18cacc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1694161007907594, guid: 0462945a75b007c459ba1a3bcf18cacc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1911315358635904, guid: 0462945a75b007c459ba1a3bcf18cacc, type: 3}
       propertyPath: m_Name
