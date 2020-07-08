@@ -41,5 +41,9 @@ public class Weapon : MonoBehaviour
         {
             other.GetComponent<Chest>().BoxOpen();
         }
+        else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("BOSSCHEST"))
+        {
+            other.GetComponent<BossChest>().BoxOpen();
+        }
     }
 }

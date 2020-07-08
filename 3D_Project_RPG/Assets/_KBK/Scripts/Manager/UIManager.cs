@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     //public Text posText;
 
     public GameObject bossHpBar;
+    GameObject[] allUI;
 
     bool playerDead;
     bool bossAppear;
@@ -28,6 +29,8 @@ public class UIManager : MonoBehaviour
     public GameObject dieScene;
     Image dieImage;
     TextMeshProUGUI dietext;
+
+    public GameObject bossName;
 
     // Start is called before the first frame update
     private void Awake()
@@ -40,13 +43,21 @@ public class UIManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         dieImage = dieScene.GetComponent<Image>();
         dietext = dieScene.GetComponentInChildren<TextMeshProUGUI>();
+        allUI = GameObject.FindGameObjectsWithTag("UI");
+        bossName.SetActive(false);
 
         bossHp = bossHpBar.GetComponentsInChildren<Image>()[2];
         bossHpText = bossHpBar.GetComponentInChildren<Text>();
 
         PlayerController.OnPlayerDead += PlayerDeadScene;
+
+        BossController.BossCamEvent += UIDisappear;
+
+        BossController.BossAppearance += UIAppear;
         BossController.BossAppearance += BossHpBarAppear;
 
+        BossController.BossDead += BossHpBarDisappear;
+        
         dieScene.SetActive(false);
         bossHpBar.SetActive(false);
     }
@@ -123,5 +134,31 @@ public class UIManager : MonoBehaviour
     {
         bossHpBar.SetActive(true);
         bossAppear = true;
+    }
+
+    public void BossHpBarDisappear()
+    {
+        bossHpBar.SetActive(false);
+        bossAppear = false;
+    }
+
+    public void UIDisappear()
+    {
+        for (int i = 0; i < allUI.Length; i++)
+        {
+            allUI[i].SetActive(false);
+        }
+
+        bossName.SetActive(true);
+    }
+
+    public void UIAppear()
+    {
+        for (int i = 0; i < allUI.Length; i++)
+        {
+            allUI[i].SetActive(true);
+        }
+
+        bossName.SetActive(false);
     }
 }

@@ -84,7 +84,6 @@ public class PlayerController : MonoBehaviour
     public int PlayerLv { get { return currLv; } }
 
     // 공격
-    Text attText;
     public int attStack;
     public bool isAttacking;
     float currAttTime;
@@ -103,9 +102,6 @@ public class PlayerController : MonoBehaviour
         canvas = GameObject.Find("DamageTextPos");
 
         currHp = maxHp;
-
-        //어택스택 확인용  Text UI
-        attText = GameObject.Find("AttStack").GetComponent<Text>();
 
         OnPlayerDead += Die;
     }
@@ -158,22 +154,7 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-
-        CheckAttStack();
         
-    }
-
-    private void CheckAttStack()
-    {
-        if (isAttacking)
-        {
-            attText.color = Color.red;
-        }
-        else
-        {
-            attText.color = Color.green;
-        }
-        attText.text = "Att : " + attStack.ToString();
     }
 
     public void Jump()

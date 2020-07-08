@@ -6,22 +6,14 @@ public class VillagePortal : MonoBehaviour
 {
     public Transform portalPoint;
     public GameObject portalFx;
-
-    Vector3 fromPoint;
-    Vector3 toPoint;
-
-    public VillagePortal(Vector3 fromPos, Vector3 toPos)
-    {
-        fromPoint = fromPos;
-        toPoint = toPos;
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
             Debug.Log("포탈이동");
             other.transform.position = portalPoint.position + new Vector3(0, 1, 0);
+            other.transform.rotation = portalPoint.rotation;
             GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerController>().enabled = false;
             
             Invoke("PortalMove", 0.1f);

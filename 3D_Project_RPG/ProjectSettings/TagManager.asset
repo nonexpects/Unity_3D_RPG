@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Boss
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - BOSS
   - BOSSATT2
   - MAP
-  - 
-  - 
+  - PROFILE
+  - BOSSCHEST
   - 
   - 
   - 

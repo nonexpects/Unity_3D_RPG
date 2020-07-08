@@ -59,7 +59,6 @@ public class QuestManager : MonoBehaviour
             if(allQuest.ContainsKey(id))
             {
                 QuestLogMaker(id);
-                QuestLogMaker(id);
                 break;
             }
         }

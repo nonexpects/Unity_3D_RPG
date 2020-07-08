@@ -31,10 +31,5 @@ public class BossBulletPool : MonoBehaviour
 
         return null;
     }
-    
-    
-    void Update()
-    {
-        
-    }
+
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum BossState
 {
@@ -16,7 +17,9 @@ public class BossController : MonoBehaviour
 {
     public delegate void BossAppearEvent();
 
+    public static event BossAppearEvent BossCamEvent;
     public static event BossAppearEvent BossAppearance;
+    public static event BossAppearEvent BossDead;
 
     public BossState state;
 
@@ -38,8 +41,11 @@ public class BossController : MonoBehaviour
     WaitForSeconds wfsAtt1 = new WaitForSeconds(2f);
     WaitForSeconds wfsAtt2 = new WaitForSeconds(9f);
     WaitForSeconds wfsAtt3 = new WaitForSeconds(5f);
+    WaitForSeconds wfsLaserDelay = new WaitForSeconds(0.6f);
 
+    //레이저관련
     public Transform beamStartPos;
+    bool laserOn;
 
     public float currHp;
     public float maxHp = 80;
@@ -50,6 +56,14 @@ public class BossController : MonoBehaviour
 
     MaterialPropertyBlock mpb;
     public SkinnedMeshRenderer smr;
+    GameObject appearCam;
+    ChromaticAberration ca;
+
+    GameObject dieFx;
+    GameObject laserhitFx;
+    public GameObject laserStartFx;
+
+    public GameObject bossChest;
 
     void Start()
     {
@@ -57,13 +71,18 @@ public class BossController : MonoBehaviour
         currHp = maxHp;
         anim = GetComponentInChildren<Animator>();
         appearAnim = GetComponentInChildren<Animation>();
+        appearCam = transform.GetChild(1).gameObject;
+        ca = appearCam.GetComponent<PostProcessVolume>().profile.GetSetting<ChromaticAberration>();
+        ca.intensity.value = 0f;
+        appearCam.SetActive(false);
 
         lr = GetComponent<LineRenderer>();
-        lr.startWidth = 0.4f;
         lr.enabled = false;
-        lr.SetColors(Color.red, Color.yellow);
 
         player = GameObject.FindGameObjectWithTag("Player");
+        dieFx = Resources.Load<GameObject>("Fx/Boss/BossDead");
+        laserhitFx = Resources.Load<GameObject>("Fx/Boss/LightningExplosionHit");
+        laserStartFx.SetActive(false);
     }
 
     void Update()
@@ -95,7 +114,7 @@ public class BossController : MonoBehaviour
     public void Appear()
     {
         if (isAppear) return;
-
+        
         Vector3 dir = (player.transform.position - transform.position).normalized;
         dir.y = 0;
         transform.forward = dir;
@@ -106,14 +125,20 @@ public class BossController : MonoBehaviour
 
     IEnumerator AppearProc()
     {
+        BossCamEvent();
+        Invoke("ChromaticAberrationOn", 1.5f);
         appearAnim.Play();
-
-        yield return new WaitForSeconds(1f);
+        appearCam.SetActive(true);
+        
+        yield return new WaitForSeconds(4f);
         state = BossState.Phase1;
+
+        appearCam.SetActive(false);
         //이걸로 수정확인
         Debug.Log("Phase 1");
-        StartCoroutine(Attack02());
+        StartCoroutine(Attack01());
         BossAppearance();
+        
     }
 
     IEnumerator Attack01()
@@ -127,7 +152,7 @@ public class BossController : MonoBehaviour
             {
                 GameObject bullet = bullets.PickUpBullet();
                 bullet.transform.position = transform.position + transform.up + transform.forward;
-
+                
                 bullet.transform.eulerAngles = transform.eulerAngles;
                 bullet.transform.Rotate(0f, angle * i - 20f, 0f);
 
@@ -138,12 +163,7 @@ public class BossController : MonoBehaviour
 
             yield return wfsAtt1;
 
-            int p = Random.Range(0, 5);
-            transform.position = movePosition[p].position;
-
-            Vector3 dir = (player.transform.position - transform.position).normalized;
-            dir.y = 0;
-            transform.forward = dir;
+            StartCoroutine(Teleport());
         }
 
     }
@@ -172,25 +192,43 @@ public class BossController : MonoBehaviour
 
     IEnumerator Attack03()
     {
-        while (currHp > 0)
+        while (currHp> 0)
         {
             anim.SetTrigger("Attack1");
 
+            laserStartFx.SetActive(true);
+
+            Vector3 dist = (transform.position - player.transform.position).normalized;
+
+            yield return wfsLaserDelay;
+
             lr.enabled = true;
 
-            yield return new WaitForSeconds(0.7f);
+            lr.SetPosition(0, laserStartFx.transform.position);
 
-            lr.SetPosition(0, beamStartPos.position); //시작점Idx : 0
-            lr.SetPosition(1, player.transform.position); //시작점Idx : 0
+            lr.SetPosition(1, player.transform.position + transform.up);
 
-            player.GetComponent<PlayerController>().Damaged(4);
+            player.GetComponent<PlayerController>().Damaged(5);
+
+            GameObject hitFx = Instantiate(laserhitFx, player.transform.position + transform.up, Quaternion.identity);
+            
+            yield return wfsLaserDelay;
+            
+            laserStartFx.SetActive(false);
+            
+            lr.enabled = false;
+
+            Destroy(hitFx);
 
             yield return wfsAtt3;
+            
         }
     }
 
     public void GetDamage(int value)
     {
+        if (state == BossState.Die) return;
+
         StartCoroutine(SetDamagedMaterial());
         currHp -= value;
         if (currHp <= 0)
@@ -204,8 +242,15 @@ public class BossController : MonoBehaviour
     void Die()
     {
         Debug.Log("Boss Dead");
+        anim.SetTrigger("Die");
+        StopCoroutine(Teleport());
+        Invoke("BossDeadFx", 2f);
         GameManager.instance.killCounter[enemyId]++;
         fromPortal.SetActive(true);
+
+        Instantiate(bossChest, movePosition[0].position, Quaternion.identity);
+
+        BossDead();
     }
 
 
@@ -214,5 +259,33 @@ public class BossController : MonoBehaviour
         smr.SetPropertyBlock(GameManager.instance.mpb);
         yield return wfsDelay;
         smr.SetPropertyBlock(null);
+    }
+
+    void ChromaticAberrationOn()
+    {
+        while (ca.intensity.value < 1)
+        {
+            ca.intensity.value += Mathf.Lerp(0f, 1f, 0.5f);
+        }
+    }
+
+    IEnumerator Teleport()
+    { 
+        int p = Random.Range(0, 5);
+        transform.position = movePosition[p].position;
+
+        Vector3 dir = (player.transform.position - transform.position).normalized;
+        dir.y = 0;
+        transform.forward = dir;
+
+        yield return null;
+    }
+
+    void BossDeadFx()
+    {
+        GameObject fx = Instantiate(dieFx, transform.position + transform.up, Quaternion.identity);
+        Destroy(fx, 2f);
+
+        Destroy(gameObject);
     }
 }

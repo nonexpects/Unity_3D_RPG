@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     BossController bossCtrl;
     public MaterialPropertyBlock mpb;
 
+    public FadeScript fade;
+
     private void Awake() // => instance = this;
     {
         if (instance == null)
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
         killCounter.Add(4, 0);
 
         mpb = new MaterialPropertyBlock();
+        Fade();
     }
     
     void Start()
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
         boss.SetActive(false);
         mpb.SetColor("_Color", Color.red);
 
+        
     }
     
     void Update()
@@ -63,10 +67,9 @@ public class GameManager : MonoBehaviour
             boss.SetActive(true);
         }
     }
-
-    public void BossIsDead()
-    {
-
-    }
     
+    public void Fade()
+    {
+        fade.StartFadeInAnim(true);
+    }
 }

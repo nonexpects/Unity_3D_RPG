@@ -22,7 +22,7 @@ public class Potion_Hp : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PLAYER"))
         {
-            other.gameObject.GetComponent<PlayerController>().GetHp(5);
+            other.gameObject.GetComponent<PlayerController>().GetHp(10);
 
             GameObject fx = Instantiate(earnFx);
             GameObject fx2 = Instantiate(earnFx2);

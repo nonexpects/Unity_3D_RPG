@@ -7,6 +7,17 @@ public class BossProjector : MonoBehaviour
     float currTime;
     float maxTime = 0.5f;
 
+    Transform image;
+
+    private void Awake()
+    {
+        image = gameObject.transform.GetChild(0);
+    }
+
+    private void Update()
+    {
+        image.transform.Rotate(Vector3.up * 90f * Time.deltaTime);
+    }
 
     private void OnTriggerStay(Collider other)
     {
