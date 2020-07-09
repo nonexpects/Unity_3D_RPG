@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
             EnemyFSM enemy = other.gameObject.GetComponent<EnemyFSM>();
             
             enemy.GetComponentInChildren<SkinnedMeshRenderer>().SetPropertyBlock(GameManager.instance.mpb);
-            enemy.hitDamage(WeaponDamage);
+            enemy.hitDamage(WeaponDamage + Random.Range(0, 5));
 
             GameObject fx = Instantiate(hitFx);
             fx.transform.position = other.transform.position + new Vector3(0, 0.5f, 0);
@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour
         {
             BossController boss = other.gameObject.GetComponent<BossController>();
             
-            boss.GetDamage(WeaponDamage);
+            boss.GetDamage(WeaponDamage + Random.Range(0, 5));
         }
         else if(player.isAttacking && other.gameObject.layer == LayerMask.NameToLayer("CHEST"))
         {

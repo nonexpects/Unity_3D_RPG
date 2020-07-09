@@ -248,7 +248,7 @@ public class BossController : MonoBehaviour
         GameManager.instance.killCounter[enemyId]++;
         fromPortal.SetActive(true);
 
-        Instantiate(bossChest, movePosition[0].position, Quaternion.identity);
+        Instantiate(bossChest, movePosition[5].position, Quaternion.identity);
 
         BossDead();
     }

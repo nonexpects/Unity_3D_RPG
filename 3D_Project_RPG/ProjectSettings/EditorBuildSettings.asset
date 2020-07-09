@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_KBK/Scenes/Title.unity
+    guid: ff969ef59ccb9f54a940e29e6f9ba319
+  - enabled: 1
+    path: Assets/_KBK/Scenes/Play.unity
+    guid: 95babd6a387c6d944898835764709355
+  - enabled: 1
+    path: Assets/_KBK/Scenes/Level1.unity
+    guid: 20012cace14a30c42a24855878e39a7a
   m_configObjects: {}

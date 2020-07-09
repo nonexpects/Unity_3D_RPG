@@ -244,4 +244,11 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
     }
+
+    public void Restart()
+    {
+        currHp = maxHp;
+        anim.SetTrigger("Idle");
+        cc.enabled = true;
+    }
 }

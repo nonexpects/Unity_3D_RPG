@@ -82,7 +82,7 @@ public class UIManager : MonoBehaviour
     public void PlayerDeadScene()
     {
         dieScene.SetActive(true);
-        Invoke("UppingText", 5f);
+
         StartCoroutine(ChangeAlpha());
         StartCoroutine(ChangeText());
     }
@@ -110,24 +110,6 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-    }
-
-    void UppingText()
-    {
-        StartCoroutine(UpText());
-    }
-
-    IEnumerator UpText()
-    {
-        Vector3 wantedPos = new Vector3(dietext.transform.localPosition.x, 200, dietext.transform.localPosition.z);
-        while (dietext.transform.localPosition.y < 200)
-        {
-            Vector3 pos = dietext.transform.localPosition;
-            pos += Vector3.Lerp(pos, wantedPos, Time.deltaTime * 0.5f);
-            dietext.transform.localPosition = pos;
-
-            yield return null;
-        }
     }
 
     public void BossHpBarAppear()
@@ -160,5 +142,11 @@ public class UIManager : MonoBehaviour
         }
 
         bossName.SetActive(false);
+    }
+
+    public void Restart()
+    {
+        player.Restart();
+        dieScene.SetActive(false);
     }
 }

@@ -6,47 +6,57 @@ using UnityEngine.UI;
 
 public class FadeScript : MonoBehaviour
 {
-
-    public float fadeTime = 2f;
-
-    Image fadeImg;
+    Image img;
+    
     float start = 0f;
     float end = 1f;
     float currTime;
 
     bool isPlaying;
-    
-    public void StartFadeInAnim(bool autoInOut = false)
+
+    private void Awake()
+    {
+        img = GetComponent<Image>();
+    }
+
+    public void FadeInOut(float time)
     {
         if (isPlaying) return;
-        fadeImg = GetComponentInChildren<Image>();
+
         StartCoroutine("FadeInAnim");
-        if(autoInOut)
-        {
-            Invoke("StartFadeOutAnim", fadeTime);
-        }
-    }
 
-    public void StartFadeOutAnim()
+        Invoke("StartFadeOutAnim", time);
+    }
+    
+
+    public void FadeIn(float time)
     {
         if (isPlaying) return;
 
-        StartCoroutine("FadeOutAnim");
+        StartCoroutine("FadeInAnim", time);
     }
 
-    IEnumerator FadeInAnim()
+    public void FadeOut(float time)
+    {
+        if (isPlaying) return;
+
+        StartCoroutine("FadeOutAnim", time);
+    }
+
+    IEnumerator FadeInAnim(float time)
     {
         isPlaying = true;
 
-        Color fadeColor = fadeImg.color;
+        Color fadeColor = img.color;
+        fadeColor.a = 0f;
         currTime = 0f;
 
         while (fadeColor.a < 1f)
         {
-            currTime += Time.deltaTime * fadeTime;
+            currTime += Time.deltaTime * time;
 
             fadeColor.a = Mathf.Lerp(start, end, currTime);
-            fadeImg.color = fadeColor;
+            img.color = fadeColor;
 
             yield return null;
         }
@@ -54,19 +64,21 @@ public class FadeScript : MonoBehaviour
         isPlaying = false;
     }
 
-    IEnumerator FadeOutAnim()
+    IEnumerator FadeOutAnim(float time)
     {
         isPlaying = true;
 
-        Color fadeColor = fadeImg.color;
+
+        Color fadeColor = img.color;
+        fadeColor.a = 1f;
         currTime = 0f;
 
-        while (fadeColor.a >= 0f)
+        while (fadeColor.a > 0f)
         {
-            currTime += Time.deltaTime * fadeTime;
+            currTime += Time.deltaTime * time;
 
             fadeColor.a = Mathf.Lerp(end, start, currTime);
-            fadeImg.color = fadeColor;
+            img.color = fadeColor;
 
             yield return null;
         }
