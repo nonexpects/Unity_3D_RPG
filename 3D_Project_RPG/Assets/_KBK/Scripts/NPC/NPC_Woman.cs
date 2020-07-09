@@ -17,7 +17,7 @@ public class NPC_Woman : NPC_Parent
         };
 
         questId = 1;
-        SetQuest(1, data, "THIS IS QUEST OF WOMAN!", "is it description? HAHAHAHAHAHAHAHAHAHAHAHHAAHAHHA", 50, 800);
+        SetQuest(1, data, "Request of Farmer", "Please, traveler. Please, lend me your hand.", 50, 800);
 
         base.Start();
     }

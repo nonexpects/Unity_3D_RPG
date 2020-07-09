@@ -15,8 +15,9 @@ public class NPC_Priest : NPC_Parent
         data.enemyId = 0;
         
         questId = 0;
-        SetQuest(questId, data, "THIS IS QUEST OF PRIEST!", "is it description? HAHAHAHAHAHAHAHAHAHAHAHHAAHAHHA", 35, 100);
-        
+        SetQuest(questId, data, "QUEST OF PRIEST", "Forgive me, adventurer. I'm in need of your service. We've been under constant attack", 35, 100);
+
+
         base.Start();
         //Debug.Log(JsonUtility.ToJson(quest));
     }
