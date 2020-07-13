@@ -33,14 +33,14 @@ public class FadeScript : MonoBehaviour
     {
         if (isPlaying) return;
 
-        StartCoroutine("FadeInAnim", time);
+        //StartCoroutine("FadeInAnim", time);
     }
 
     public void FadeOut(float time)
     {
         if (isPlaying) return;
 
-        StartCoroutine("FadeOutAnim", time);
+        //StartCoroutine("FadeOutAnim", time);
     }
 
     IEnumerator FadeInAnim(float time)

@@ -8,7 +8,6 @@ public class MainTitle : MonoBehaviour
 {
     public GameObject trigger;
     public GameObject titleMenu;
-    public FadeScript fade;
 
     float start = 1;
     float end = 0;
@@ -18,7 +17,7 @@ public class MainTitle : MonoBehaviour
     
     private void Start()
     {
-        StartCoroutine(FadeOut());
+        //StartCoroutine(FadeOut());
     }
 
     private void Update()
@@ -50,7 +49,7 @@ public class MainTitle : MonoBehaviour
         isPlaying = false;
         currTime = 0f;
 
-        StartCoroutine(FadeOut());
+        //StartCoroutine(FadeOut());
     }
 
     IEnumerator FadeOut()
@@ -72,12 +71,11 @@ public class MainTitle : MonoBehaviour
         isPlaying = false;
         currTime = 0f;
 
-        StartCoroutine(FadeIn());
+        //StartCoroutine(FadeIn());
     }
 
     public void GameStart()
     {
-        fade.FadeIn(5f);
         SceneManager.LoadScene("Level1");
         SceneManager.LoadScene("Play", LoadSceneMode.Additive);
     }

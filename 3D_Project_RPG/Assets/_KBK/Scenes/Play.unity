@@ -1196,6 +1196,7 @@ GameObject:
   - component: {fileID: 511599256}
   - component: {fileID: 511599257}
   - component: {fileID: 511599258}
+  - component: {fileID: 511599259}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1253,6 +1254,18 @@ MonoBehaviour:
   bossHpBar: {fileID: 1392395669}
   dieScene: {fileID: 871086529}
   bossName: {fileID: 1797716451}
+--- !u!114 &511599259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511599255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a943fc7588c2db44ca2e6dc5b7ba1343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &605588820
 GameObject:
   m_ObjectHideFlags: 0
@@ -4040,7 +4053,7 @@ PrefabInstance:
     - target: {fileID: 3881087803549984436, guid: ec536a7718376554185e4a856d5ae230,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50
+      value: -49.99994
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984436, guid: ec536a7718376554185e4a856d5ae230,
         type: 3}

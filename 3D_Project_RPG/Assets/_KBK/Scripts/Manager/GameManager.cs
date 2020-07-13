@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         boss.SetActive(false);
         mpb.SetColor("_Color", Color.red);
 
-        fade.FadeOut(4f);
+        //fade.FadeOut(4f);
     }
     
     void Update()
